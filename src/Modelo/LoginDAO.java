@@ -27,7 +27,7 @@ public class LoginDAO {
                 l.setPass(rs.getString("pass"));
                 l.setRol(rs.getString("rol")); 
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println(e.toString());
         }
         return l;

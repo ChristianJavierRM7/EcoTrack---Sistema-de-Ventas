@@ -14,6 +14,7 @@ LoginDAO login = new LoginDAO();
         initComponents();
         this.setLocationRelativeTo(null);
     }
+    
 public void validar(){
     String correo = txtCorreo.getText();
     String pass = String.valueOf(txtPass.getPassword());
@@ -24,10 +25,11 @@ public void validar(){
         lg.setCorreo(correo);
         lg.setPass(pass);
         lg.setRol(rol);
-        lg= login.log(correo, pass);
-        Login iniciar = new Login();
-        iniciar.setVisible(true);
-        dispose();
+        
+     login.Registrar(lg);
+     Login iniciar = new Login();
+     iniciar.setVisible(true);
+     dispose();
     }
 }
     /**
