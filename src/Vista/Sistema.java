@@ -40,6 +40,7 @@ import java.util.logging.Level;
 import com.itextpdf.text.pdf.PdfPCell;
 import java.awt.Desktop;
 import java.io.IOException;
+import javax.swing.JTable;
 
 
 public class Sistema extends javax.swing.JFrame {
@@ -165,10 +166,11 @@ txtIdCliente.setVisible(false);
         TableVentas.setModel(modelo);
     }   
        
-    public void LimpiarTable() {
-    modelo = (DefaultTableModel) TableCliente.getModel();
-    modelo.setRowCount(0);
+   public void LimpiarTable(JTable tabla) {
+    DefaultTableModel model = (DefaultTableModel) tabla.getModel();
+    model.setRowCount(0);
 }
+
 
 
     /**
@@ -1139,7 +1141,7 @@ txtIdCliente.setVisible(false);
             client.RegistrarCliente(cl);
             JOptionPane.showMessageDialog(null, "Cliente registrado");
 
-            LimpiarTable();
+            LimpiarTable(TableCliente);
             LimpiarCliente();
             ListarCliente();
         } else {
@@ -1174,7 +1176,7 @@ txtIdCliente.setVisible(false);
         txtCantPro.setText("");
     }
     private void btnClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClientesActionPerformed
-        LimpiarTable();
+        LimpiarTable(TableCliente);
         ListarCliente();
         jTabbedPane1.setSelectedIndex(1);
     }//GEN-LAST:event_btnClientesActionPerformed
@@ -1195,7 +1197,7 @@ txtIdCliente.setVisible(false);
             if (pregunta == 0) {
                 int id = Integer.parseInt(txtIdCliente.getText());
                 client.EliminarCliente(id);
-                LimpiarTable();
+                LimpiarTable(TableCliente);
                 LimpiarCliente();
                 ListarCliente();
             }
@@ -1217,7 +1219,7 @@ txtIdCliente.setVisible(false);
                 client.ModificarCliente(cl);
                 JOptionPane.showMessageDialog(null, "Cliente modificado");
 
-                LimpiarTable();
+                LimpiarTable(TableCliente);
                 LimpiarCliente();
                 ListarCliente();
             } else {
@@ -1240,7 +1242,7 @@ txtIdCliente.setVisible(false);
         PrDao.RegistrarProveedor(pr);
         JOptionPane.showMessageDialog(null, "Proveedor registrado");
 
-        LimpiarTable();
+        LimpiarTable(TableProveedor);
         ListarProveedor();
         LimpiarProveedor();
     }else{
@@ -1249,7 +1251,7 @@ txtIdCliente.setVisible(false);
     }//GEN-LAST:event_btnguardarProveedorActionPerformed
 
     private void btnProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProveedorActionPerformed
-        LimpiarTable();
+        LimpiarTable(TableProveedor);
         ListarProveedor();
         jTabbedPane1.setSelectedIndex(2);
     }//GEN-LAST:event_btnProveedorActionPerformed
@@ -1270,7 +1272,7 @@ txtIdCliente.setVisible(false);
             if(pregunta==0){
                 int id =Integer.parseInt(txtIdProveedor.getText());
                 PrDao.EliminarProveedor(id);
-                LimpiarTable();
+                LimpiarTable(TableProveedor);
                 ListarProveedor();
                 LimpiarProveedor();
             }
@@ -1293,7 +1295,7 @@ txtIdCliente.setVisible(false);
                 PrDao.ModificarProveedor(pr);
                 JOptionPane.showMessageDialog(null, "Proveedor modificado");
 
-                LimpiarTable();
+                LimpiarTable(TableProveedor);
                 ListarProveedor();
                 LimpiarProveedor();
             }
@@ -1313,13 +1315,15 @@ txtIdCliente.setVisible(false);
             pro.setPrecio(Double.parseDouble(txtPrecioPro.getText()));
             proDao.RegistrarProductos(pro);
             JOptionPane.showMessageDialog(null, "Producto registrado");
+            LimpiarTable(TableProducto);
+            ListarProductos();
         }else{
             JOptionPane.showMessageDialog(null, "Los campos no pueden estar vacíos");
         }
     }//GEN-LAST:event_btnGuardarproActionPerformed
 
     private void btnProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductosActionPerformed
-        LimpiarTable();
+        LimpiarTable(TableProducto);
         ListarProductos();
         jTabbedPane1.setSelectedIndex(3);
     }//GEN-LAST:event_btnProductosActionPerformed
@@ -1340,7 +1344,7 @@ txtIdCliente.setVisible(false);
             if (pregunta == 0) {
                 int id = Integer.parseInt(txtIdPro.getText());
 proDao.EliminarProductos(id);
-        LimpiarTable();
+        LimpiarTable(TableProducto);
                 LimpiarProductos();
                 ListarProductos();
             }
@@ -1361,7 +1365,7 @@ proDao.EliminarProductos(id);
                 proDao.ModificarProductos(pro);
                 JOptionPane.showMessageDialog(null, "Producto modificado");
 
-                LimpiarTable();
+                LimpiarTable(TableProducto);
                 ListarProductos();
                 LimpiarProductos();
             }
@@ -1528,7 +1532,7 @@ proDao.EliminarProductos(id);
 
     private void btnVentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVentasActionPerformed
         jTabbedPane1.setSelectedIndex(4);
-        LimpiarTable();
+        LimpiarTable(TableVentas);
         ListarVentas();
     }//GEN-LAST:event_btnVentasActionPerformed
 

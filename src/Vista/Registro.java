@@ -13,25 +13,62 @@ LoginDAO login = new LoginDAO();
     public Registro() {
         initComponents();
         this.setLocationRelativeTo(null);
+        this.ocultarPassReg.setVisible(false);
+        this.ocultarRegPassConf.setVisible(false);
     }
     
-public void validar(){
-    String correo = txtCorreo.getText();
+public void validar() {
+    String correo = txtCorreo.getText().trim();
     String pass = String.valueOf(txtPass.getPassword());
-    String nom = txtNombre.getText();
+    String confPass = String.valueOf(txtConfPass.getPassword());
+    String nom = txtNombre.getText().trim();
     String rol = cbxRol.getSelectedItem().toString();
-    if(!"".equals(correo)||!"".equals(pass) || !"".equals(nom)){
-        lg.setNombre(nom);
-        lg.setCorreo(correo);
-        lg.setPass(pass);
-        lg.setRol(rol);
-        
-     login.Registrar(lg);
-     Login iniciar = new Login();
-     iniciar.setVisible(true);
-     dispose();
+
+    // 1️⃣ Validar campos vacíos
+    if (correo.isEmpty() || pass.isEmpty() || confPass.isEmpty() || nom.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios");
+        return;
     }
+
+    // 2️⃣ Validar formato de email
+    if (!correo.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+        JOptionPane.showMessageDialog(this, "Ingrese un correo válido");
+        return;
+    }
+
+    // 3️⃣ Validar longitud mínima de contraseña
+    if (pass.length() < 6) {
+        JOptionPane.showMessageDialog(this, "La contraseña debe tener al menos 6 caracteres");
+        return;
+    }
+
+    // 4️⃣ Validar coincidencia de contraseñas
+    if (!pass.equals(confPass)) {
+        JOptionPane.showMessageDialog(this, "Las contraseñas no coinciden");
+        return;
+    }
+
+    // 5️⃣ Validar rol
+    if (rol.equals("Seleccionar")) {
+        JOptionPane.showMessageDialog(this, "Seleccione un rol válido");
+        return;
+    }
+
+    // 6️⃣ Si todas las validaciones pasan, registrar
+    lg.setNombre(nom);
+    lg.setCorreo(correo);
+    lg.setPass(pass);
+    lg.setRol(rol);
+
+    login.Registrar(lg);
+
+    JOptionPane.showMessageDialog(this, "Usuario registrado correctamente");
+
+    Login iniciar = new Login();
+    iniciar.setVisible(true);
+    dispose();
 }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -52,35 +89,51 @@ public void validar(){
         jLabel10 = new javax.swing.JLabel();
         txtNombre = new javax.swing.JTextField();
         cbxRol = new javax.swing.JComboBox<>();
+        jButton1 = new javax.swing.JButton();
+        jLabel13 = new javax.swing.JLabel();
+        txtConfPass = new javax.swing.JPasswordField();
+        verPassReg = new javax.swing.JLabel();
+        ocultarPassReg = new javax.swing.JLabel();
+        verRegPassConf = new javax.swing.JLabel();
+        ocultarRegPassConf = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/iniciar.png"))); // NOI18N
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 10, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel3.setText("Correo Electrónico:");
+        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, -1, -1));
 
         txtCorreo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtCorreoActionPerformed(evt);
             }
         });
+        jPanel2.add(txtCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 313, -1));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel4.setText("Contraseña:");
+        jLabel4.setText("Confirmar contraseña:");
+        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, -1, -1));
 
         txtPass.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtPassActionPerformed(evt);
             }
         });
+        jPanel2.add(txtPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 260, -1));
 
         btnIniciar.setBackground(new java.awt.Color(51, 51, 255));
         btnIniciar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -91,65 +144,67 @@ public void validar(){
                 btnIniciarActionPerformed(evt);
             }
         });
+        jPanel2.add(btnIniciar, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 360, 83, 43));
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel9.setText("Nombre:");
+        jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 250, -1, -1));
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel10.setText("Rol:");
+        jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, -1, -1));
+        jPanel2.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 270, 313, 27));
 
         cbxRol.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Administrador", "Asistente" }));
+        jPanel2.add(cbxRol, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 319, 313, 30));
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(127, 127, 127)
-                        .addComponent(jLabel2))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(137, 137, 137)
-                        .addComponent(btnIniciar, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel10)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4)
-                            .addComponent(txtCorreo)
-                            .addComponent(txtPass, javax.swing.GroupLayout.DEFAULT_SIZE, 313, Short.MAX_VALUE)
-                            .addComponent(jLabel9)
-                            .addComponent(txtNombre)
-                            .addComponent(cbxRol, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap(20, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel9)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel10)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cbxRol, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(btnIniciar, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
+        jButton1.setBackground(new java.awt.Color(255, 0, 0));
+        jButton1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(255, 255, 255));
+        jButton1.setText("Regresar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 360, 110, 40));
+
+        jLabel13.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel13.setText("Contraseña:");
+        jPanel2.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, -1, -1));
+        jPanel2.add(txtConfPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 210, 260, -1));
+
+        verPassReg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/image-removebg-preview (6) (2).png"))); // NOI18N
+        verPassReg.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                verPassRegMouseClicked(evt);
+            }
+        });
+        jPanel2.add(verPassReg, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 150, -1, 40));
+
+        ocultarPassReg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/image-removebg-preview (7) (1).png"))); // NOI18N
+        ocultarPassReg.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ocultarPassRegMouseClicked(evt);
+            }
+        });
+        jPanel2.add(ocultarPassReg, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 150, -1, 30));
+
+        verRegPassConf.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/image-removebg-preview (6) (2).png"))); // NOI18N
+        verRegPassConf.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                verRegPassConfMouseClicked(evt);
+            }
+        });
+        jPanel2.add(verRegPassConf, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 210, -1, 40));
+
+        ocultarRegPassConf.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/image-removebg-preview (7) (1).png"))); // NOI18N
+        ocultarRegPassConf.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ocultarRegPassConfMouseClicked(evt);
+            }
+        });
+        jPanel2.add(ocultarRegPassConf, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 200, -1, 50));
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 20, 360, 410));
 
@@ -161,22 +216,34 @@ public void validar(){
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 10, -1, -1));
 
         jLabel6.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Wide Latin", 1, 24)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel6.setText("Ventas");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 190, -1, -1));
+        jLabel6.setText("nuevo usuario");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 340, 340, -1));
 
         jLabel7.setBackground(new java.awt.Color(255, 255, 255));
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("y");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 160, -1, -1));
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 170, -1, -1));
 
         jLabel8.setBackground(new java.awt.Color(255, 255, 255));
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 22)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setText("Sistema de Gestión de Inventario");
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, 380, -1));
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, 380, -1));
+
+        jLabel11.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel11.setText("Ventas");
+        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 200, -1, -1));
+
+        jLabel12.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel12.setFont(new java.awt.Font("Wide Latin", 1, 24)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel12.setText("Registro de ");
+        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 300, 250, -1));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 480, 450));
 
@@ -198,6 +265,35 @@ public void validar(){
         validar();
         
     }//GEN-LAST:event_btnIniciarActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+Login iniciar = new Login();
+     iniciar.setVisible(true);
+     dispose();    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void verPassRegMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_verPassRegMouseClicked
+        verPassReg.setVisible(false);
+        ocultarPassReg.setVisible(true);
+        txtPass.setEchoChar((char)0);
+    }//GEN-LAST:event_verPassRegMouseClicked
+
+    private void ocultarPassRegMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ocultarPassRegMouseClicked
+        verPassReg.setVisible(true);
+        ocultarPassReg.setVisible(false);
+        txtPass.setEchoChar('*');
+    }//GEN-LAST:event_ocultarPassRegMouseClicked
+
+    private void verRegPassConfMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_verRegPassConfMouseClicked
+        verRegPassConf.setVisible(false);
+        ocultarRegPassConf.setVisible(true);
+        txtConfPass.setEchoChar((char)0);
+    }//GEN-LAST:event_verRegPassConfMouseClicked
+
+    private void ocultarRegPassConfMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ocultarRegPassConfMouseClicked
+        verRegPassConf.setVisible(true);
+        ocultarRegPassConf.setVisible(false);
+        txtConfPass.setEchoChar('*');
+    }//GEN-LAST:event_ocultarRegPassConfMouseClicked
 
     /**
      * @param args the command line arguments
@@ -227,8 +323,12 @@ public void validar(){
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnIniciar;
     private javax.swing.JComboBox<String> cbxRol;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -239,8 +339,13 @@ public void validar(){
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel ocultarPassReg;
+    private javax.swing.JLabel ocultarRegPassConf;
+    private javax.swing.JPasswordField txtConfPass;
     private javax.swing.JTextField txtCorreo;
     private javax.swing.JTextField txtNombre;
     private javax.swing.JPasswordField txtPass;
+    private javax.swing.JLabel verPassReg;
+    private javax.swing.JLabel verRegPassConf;
     // End of variables declaration//GEN-END:variables
 }

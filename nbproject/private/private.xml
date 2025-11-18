@@ -14,14 +14,12 @@
         <group>
             <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/SistemaVenta/src/Vista/Sistema.java</file>
             <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/SistemaVenta/src/Vista/Registro.java</file>
-            <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/SistemaVenta/src/sistemaventa/SistemaVenta.java</file>
             <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/SistemaVenta/src/Vista/Login.java</file>
-            <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/SistemaVenta/src/Modelo/login.java</file>
-            <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/SistemaVenta/src/Modelo/LoginDAO.java</file>
-            <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/SistemaVenta/src/Modelo/Cliente.java</file>
-            <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/SistemaVenta/src/Modelo/ClienteDao.java</file>
-            <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/SistemaVenta/src/Modelo/Proveedor.java</file>
-            <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/SistemaVenta/src/Modelo/ProveedorDao.java</file>
+            <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/SistemaVenta/build.xml</file>
+            <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/SistemaVenta/src/Img/login.jpg</file>
+            <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/SistemaVenta/src/Img/login.png</file>
+            <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/SistemaVenta/src/sistemaventa/SistemaVenta.java</file>
+            <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/SistemaVenta/src/Reportes/Excel.java</file>
         </group>
     </open-files>
 </project-private>
