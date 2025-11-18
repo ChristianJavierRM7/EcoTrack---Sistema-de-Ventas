@@ -65,7 +65,9 @@ public class Sistema extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Sistema.class.getName());
 
     public Sistema() {
+        
         initComponents();
+        setLocationRelativeTo(null);
 txtIdCliente.setVisible(false);
         jTabbedPane1.setEnabled(false);
         txtRazonCV.setVisible(false);
@@ -164,11 +166,10 @@ txtIdCliente.setVisible(false);
     }   
        
     public void LimpiarTable() {
-        for (int i = 0; i < modelo.getRowCount(); i++) {
-            modelo.removeRow(i);
-            i = i - 1;
-        }
-    }
+    modelo = (DefaultTableModel) TableCliente.getModel();
+    modelo.setRowCount(0);
+}
+
 
     /**
      * This method is called from within the constructor to initialize the form.
