@@ -321,6 +321,7 @@ txtIdCliente.setVisible(false);
         jLabel52 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(102, 102, 102));
@@ -550,9 +551,9 @@ txtIdCliente.setVisible(false);
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel10.setText("CED/RUC");
         jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 360, -1, -1));
-        jPanel2.add(txtTelefonoCV, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 10, 10, -1));
-        jPanel2.add(txtDireccionCV, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 10, 10, -1));
-        jPanel2.add(txtRazonCV, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 10, 10, -1));
+        jPanel2.add(txtTelefonoCV, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 10, 10, -1));
+        jPanel2.add(txtDireccionCV, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 40, 10, -1));
+        jPanel2.add(txtRazonCV, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 40, 10, -1));
         jPanel2.add(txtIdPro, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 10, 10, -1));
 
         btnGraficar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -613,15 +614,30 @@ txtIdCliente.setVisible(false);
         jPanel3.add(txtRazonCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 100, 190, -1));
 
         txtDniCliente.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtDniCliente.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtDniClienteKeyTyped(evt);
+            }
+        });
         jPanel3.add(txtDniCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 50, 117, -1));
 
         txtTelefonoCliente.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtTelefonoCliente.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTelefonoClienteKeyTyped(evt);
+            }
+        });
         jPanel3.add(txtTelefonoCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 50, 120, -1));
 
         txtDireccionCliente.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtDireccionCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtDireccionClienteActionPerformed(evt);
+            }
+        });
+        txtDireccionCliente.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtDireccionClienteKeyTyped(evt);
             }
         });
         jPanel3.add(txtDireccionCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 100, 190, -1));
@@ -708,6 +724,11 @@ txtIdCliente.setVisible(false);
         jPanel3.add(jLabel44, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 20, -1, -1));
 
         txtNombreCliente.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtNombreCliente.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreClienteKeyTyped(evt);
+            }
+        });
         jPanel3.add(txtNombreCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 50, 190, -1));
 
         jTabbedPane1.addTab("Clientes", jPanel3);
@@ -743,18 +764,38 @@ txtIdCliente.setVisible(false);
         jPanel4.add(txtRazonProveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 90, 160, -1));
 
         txtRucProveedor.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtRucProveedor.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtRucProveedorKeyTyped(evt);
+            }
+        });
         jPanel4.add(txtRucProveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 40, 110, -1));
 
         txtNombreproveedor.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtNombreproveedor.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreproveedorKeyTyped(evt);
+            }
+        });
         jPanel4.add(txtNombreproveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 40, 180, -1));
 
         txtTelefonoProveedor.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtTelefonoProveedor.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTelefonoProveedorKeyTyped(evt);
+            }
+        });
         jPanel4.add(txtTelefonoProveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 40, 150, -1));
 
         txtDireccionProveedor.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtDireccionProveedor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtDireccionProveedorActionPerformed(evt);
+            }
+        });
+        txtDireccionProveedor.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtDireccionProveedorKeyTyped(evt);
             }
         });
         jPanel4.add(txtDireccionProveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 90, 180, -1));
@@ -872,6 +913,11 @@ txtIdCliente.setVisible(false);
         jPanel5.add(txtDesPro, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 30, 180, -1));
 
         txtCantPro.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtCantPro.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCantProKeyTyped(evt);
+            }
+        });
         jPanel5.add(txtCantPro, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 80, 80, -1));
 
         txtPrecioPro.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -1065,12 +1111,27 @@ txtIdCliente.setVisible(false);
         jPanel7.add(jLabel31, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 210, -1, -1));
 
         txtTelefonoConfig.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtTelefonoConfig.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTelefonoConfigKeyTyped(evt);
+            }
+        });
         jPanel7.add(txtTelefonoConfig, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 150, 200, -1));
 
         txtRucConfig.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtRucConfig.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtRucConfigKeyTyped(evt);
+            }
+        });
         jPanel7.add(txtRucConfig, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 150, 150, -1));
 
         txtNombreConfig.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtNombreConfig.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreConfigKeyTyped(evt);
+            }
+        });
         jPanel7.add(txtNombreConfig, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 150, 230, -1));
 
         txtDireccionConfig.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -1132,21 +1193,43 @@ txtIdCliente.setVisible(false);
     }//GEN-LAST:event_txtPrecioProActionPerformed
 
     private void btnGuardarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarClienteActionPerformed
-        if (!"".equals(txtDniCliente.getText()) || !"".equals(txtNombreCliente.getText()) || !"".equals(txtTelefonoCliente.getText()) || !"".equals(txtDireccionCliente.getText())) {
-            cl.setDni(Integer.parseInt(txtDniCliente.getText()));
-            cl.setNombre(txtNombreCliente.getText());
-            cl.setTelefono(Integer.parseInt(txtTelefonoCliente.getText()));
-            cl.setDireccion(txtDireccionCliente.getText());
-            cl.setRazon(txtRazonCliente.getText());
-            client.RegistrarCliente(cl);
-            JOptionPane.showMessageDialog(null, "Cliente registrado");
+    
+    // Validar campos vacíos
+    if ("".equals(txtDniCliente.getText()) || 
+        "".equals(txtNombreCliente.getText()) || 
+        "".equals(txtTelefonoCliente.getText()) || 
+        "".equals(txtDireccionCliente.getText())) {
 
-            LimpiarTable(TableCliente);
-            LimpiarCliente();
-            ListarCliente();
-        } else {
-            JOptionPane.showMessageDialog(null, "Los campos están vacios");
-        }
+        JOptionPane.showMessageDialog(null, "Los campos están vacíos");
+        return;
+    }
+
+    // Validar longitud de cédula (primer método)
+    if (txtDniCliente.getText().length() != 10) {
+        JOptionPane.showMessageDialog(null, "La cédula debe tener 10 dígitos");
+        return;
+    }
+
+    // Validación oficial de cédula ecuatoriana
+    if (!validarCedula(txtDniCliente.getText())) {
+        JOptionPane.showMessageDialog(null, "Cédula incorrecta");
+        return;
+    }
+
+    // Si todo está OK → guardar
+    cl.setDni(Integer.parseInt(txtDniCliente.getText()));
+    cl.setNombre(txtNombreCliente.getText());
+    cl.setTelefono(Integer.parseInt(txtTelefonoCliente.getText()));
+    cl.setDireccion(txtDireccionCliente.getText());
+    cl.setRazon(txtRazonCliente.getText());
+    client.RegistrarCliente(cl);
+
+    JOptionPane.showMessageDialog(null, "Cliente registrado");
+
+    LimpiarTable(TableCliente);
+    LimpiarCliente();
+    ListarCliente();
+
     }//GEN-LAST:event_btnGuardarClienteActionPerformed
     private void LimpiarCliente() {
         txtIdCliente.setText("");
@@ -1512,6 +1595,16 @@ proDao.EliminarProductos(id);
 
     private void txtPrecioProKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioProKeyTyped
         event.numberDecimalKeyPress(evt, txtPrecioPro);
+           char c = evt.getKeyChar();
+
+    if (!Character.isDigit(c)) {
+        evt.consume();
+        return;
+    }
+
+    if (txtCantPro.getText().length() >= 4) {
+        evt.consume();
+    }
     }//GEN-LAST:event_txtPrecioProKeyTyped
 
     private void btnActualizarConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarConfigActionPerformed
@@ -1554,7 +1647,7 @@ proDao.EliminarProductos(id);
     private void btnGraficarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGraficarActionPerformed
         
         String fechaReporte = new SimpleDateFormat("dd-MM-yyyy").format(Midate.getDate());
-        Grafico.Graficar(fechaActual);
+        Grafico.Graficar(fechaReporte);
     }//GEN-LAST:event_btnGraficarActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -1570,6 +1663,143 @@ proDao.EliminarProductos(id);
     private void txtCodigoProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoProActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCodigoProActionPerformed
+
+    private void txtDniClienteKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDniClienteKeyTyped
+    char c = evt.getKeyChar();
+
+    if (!Character.isDigit(c)) {
+        evt.consume();
+    }
+
+    if (txtDniCliente.getText().length() >= 10) {
+        evt.consume();
+    }
+    }//GEN-LAST:event_txtDniClienteKeyTyped
+
+    private void txtNombreClienteKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreClienteKeyTyped
+    char c = evt.getKeyChar();
+
+    
+    if (!Character.isLetter(c) && c != ' ') {
+        evt.consume(); 
+    }
+    }//GEN-LAST:event_txtNombreClienteKeyTyped
+
+    private void txtTelefonoClienteKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTelefonoClienteKeyTyped
+    char c = evt.getKeyChar();
+
+    if (!Character.isDigit(c)) {
+        evt.consume();
+        return;
+    }
+
+    if (txtTelefonoCliente.getText().length() >= 10) {
+        evt.consume();
+    }
+    }//GEN-LAST:event_txtTelefonoClienteKeyTyped
+
+    private void txtDireccionClienteKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDireccionClienteKeyTyped
+    char c = evt.getKeyChar();
+    if (Character.isLetterOrDigit(c) || c == ' ' || c == '#' || c == '-' || c == '.' || c == ',') {
+    } else {
+        evt.consume(); 
+    }
+    }//GEN-LAST:event_txtDireccionClienteKeyTyped
+
+    private void txtRucProveedorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRucProveedorKeyTyped
+    char c = evt.getKeyChar();
+
+    
+    if (!Character.isDigit(c)) {
+        evt.consume();
+        return;
+    }
+
+    if (txtRucProveedor.getText().length() >= 13) {
+        evt.consume();
+    }
+
+
+    }//GEN-LAST:event_txtRucProveedorKeyTyped
+
+    private void txtNombreproveedorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreproveedorKeyTyped
+char c = evt.getKeyChar();
+
+    
+    if (!Character.isLetter(c) && c != ' ') {
+        evt.consume(); 
+    }
+    }//GEN-LAST:event_txtNombreproveedorKeyTyped
+
+    private void txtTelefonoProveedorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTelefonoProveedorKeyTyped
+ char c = evt.getKeyChar();
+
+    if (!Character.isDigit(c)) {
+        evt.consume();
+        return;
+    }
+
+    if (txtTelefonoCliente.getText().length() >= 10) {
+        evt.consume();
+    }
+    }//GEN-LAST:event_txtTelefonoProveedorKeyTyped
+
+    private void txtDireccionProveedorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDireccionProveedorKeyTyped
+    char c = evt.getKeyChar();
+    if (Character.isLetterOrDigit(c) || c == ' ' || c == '#' || c == '-' || c == '.' || c == ',') {
+    } else {
+        evt.consume(); 
+    }
+    }//GEN-LAST:event_txtDireccionProveedorKeyTyped
+
+    private void txtCantProKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantProKeyTyped
+    char c = evt.getKeyChar();
+
+    if (!Character.isDigit(c)) {
+        evt.consume();
+        return;
+    }
+
+    if (txtCantPro.getText().length() >= 4) {
+        evt.consume();
+    }
+
+    }//GEN-LAST:event_txtCantProKeyTyped
+
+    private void txtRucConfigKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRucConfigKeyTyped
+  char c = evt.getKeyChar();
+
+    if (!Character.isDigit(c)) {
+        evt.consume();
+    }
+
+    if (txtDniCliente.getText().length() >= 10) {
+        evt.consume();
+    }
+    }//GEN-LAST:event_txtRucConfigKeyTyped
+
+    private void txtNombreConfigKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreConfigKeyTyped
+ char c = evt.getKeyChar();
+
+    
+    if (!Character.isLetter(c) && c != ' ') {
+        evt.consume(); 
+    }
+    }//GEN-LAST:event_txtNombreConfigKeyTyped
+
+    private void txtTelefonoConfigKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTelefonoConfigKeyTyped
+  char c = evt.getKeyChar();
+
+    if (!Character.isDigit(c)) {
+        evt.consume();
+        return;
+    }
+
+    if (txtTelefonoCliente.getText().length() >= 10) {
+        evt.consume();
+    }
+    }//GEN-LAST:event_txtTelefonoConfigKeyTyped
+    
     private void TotalPagar(){
         Totalpagar=0.00;
         int numFila = TablaVenta.getRowCount();
@@ -1580,7 +1810,26 @@ proDao.EliminarProductos(id);
         LabelTotal.setText(String.format("%.2f", Totalpagar));
     }
     
- 
+ public static boolean validarCedula(String cedula) {
+    if (cedula == null || !cedula.matches("\\d{10}")) return false;
+
+    int provincia = Integer.parseInt(cedula.substring(0, 2));
+    if (provincia < 1 || provincia > 24) return false;
+
+    int[] coef = {2,1,2,1,2,1,2,1,2};
+    int suma = 0;
+
+    for (int i = 0; i < 9; i++) {
+        int valor = Character.getNumericValue(cedula.charAt(i)) * coef[i];
+        if (valor > 9) valor -= 9;
+        suma += valor;
+    }
+
+    int verificador = (10 - (suma % 10)) % 10;
+
+    return verificador == Character.getNumericValue(cedula.charAt(9));
+}
+
     
     private void ActualizarStock(){
         for (int i = 0; i < TablaVenta.getRowCount(); i++) {
