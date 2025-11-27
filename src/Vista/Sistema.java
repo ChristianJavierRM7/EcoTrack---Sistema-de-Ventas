@@ -1,6 +1,7 @@
 package Vista;
 
 import Controladores.ClientesJpaController;
+import Entidades.Clientes;
 import Modelo.Cliente;
 import Modelo.ClienteDao;
 import Modelo.Config;
@@ -47,8 +48,7 @@ import javax.swing.JTable;
 
 
 public class Sistema extends javax.swing.JFrame {
-EntityManagerFactory emf = Persistence.createEntityManagerFactory("SistemaVenta");
-ClientesJpaController clientesJpa = new ClientesJpaController(emf);
+
 
     Cliente cl = new Cliente();
     ClienteDao client = new ClienteDao();
@@ -69,12 +69,16 @@ ClientesJpaController clientesJpa = new ClientesJpaController(emf);
     int item;
     double Totalpagar = 0.00;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Sistema.class.getName());
+    private ClientesJpaController clientesJpa;
 
     public Sistema() {
         
         initComponents();
         setLocationRelativeTo(null);
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("SistemaVenta");
+    this.clientesJpa = new ClientesJpaController(emf);  // ← CORRECTO
 txtIdCliente.setVisible(false);
+
         jTabbedPane1.setEnabled(false);
         txtRazonCV.setVisible(false);
         txtIdVenta.setVisible(false);
@@ -90,6 +94,7 @@ txtIdCliente.setVisible(false);
        public Sistema(login priv){
            initComponents();
             this.setLocationRelativeTo(null);
+           
         txtIdCliente.setVisible(false);
         txtIdVenta.setVisible(false);
         txtIdPro.setVisible(false);
@@ -109,21 +114,22 @@ txtIdCliente.setVisible(false);
         }
     }
     
-    public void ListarCliente() {
-        List<Cliente> ListarCl = client.ListarCliente();
-        modelo = (DefaultTableModel) TableCliente.getModel();
-        Object[] ob = new Object[6];
-        for (int i = 0; i < ListarCl.size(); i++) {
-            ob[0] = ListarCl.get(i).getId();
-            ob[1] = ListarCl.get(i).getDni();
-            ob[2] = ListarCl.get(i).getNombre();
-            ob[3] = ListarCl.get(i).getTelefono();
-            ob[4] = ListarCl.get(i).getDireccion();
-            ob[5] = ListarCl.get(i).getRazon();
-            modelo.addRow(ob);
-        }
-        TableCliente.setModel(modelo);
+ public void ListarCliente() {
+    List<Clientes> lista = clientesJpa.findClientesEntities();
+    modelo = (DefaultTableModel) TableCliente.getModel();
+    Object[] ob = new Object[6];
+
+    for (Clientes c : lista) {
+        ob[0] = c.getId();
+        ob[1] = c.getDni();
+        ob[2] = c.getNombre();
+        ob[3] = c.getTelefono();
+        ob[4] = c.getDireccion();
+        ob[5] = c.getRazon();
+        modelo.addRow(ob);
     }
+    TableCliente.setModel(modelo);
+}
 
     public void ListarProveedor() {
         List<Proveedor> ListarPr = PrDao.ListarProveedor();
@@ -1199,41 +1205,45 @@ txtIdCliente.setVisible(false);
 
     private void btnGuardarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarClienteActionPerformed
     
-    // Validar campos vacíos
-    if ("".equals(txtDniCliente.getText()) || 
-        "".equals(txtNombreCliente.getText()) || 
-        "".equals(txtTelefonoCliente.getText()) || 
-        "".equals(txtDireccionCliente.getText())) {
 
+    if (txtDniCliente.getText().isEmpty() ||
+        txtNombreCliente.getText().isEmpty() ||
+        txtTelefonoCliente.getText().isEmpty() ||
+        txtDireccionCliente.getText().isEmpty()) {
         JOptionPane.showMessageDialog(null, "Los campos están vacíos");
         return;
     }
 
-    // Validar longitud de cédula (primer método)
     if (txtDniCliente.getText().length() != 10) {
         JOptionPane.showMessageDialog(null, "La cédula debe tener 10 dígitos");
         return;
     }
 
-    // Validación oficial de cédula ecuatoriana
     if (!validarCedula(txtDniCliente.getText())) {
         JOptionPane.showMessageDialog(null, "Cédula incorrecta");
         return;
     }
 
-    // Si todo está OK → guardar
-    cl.setDni(Integer.parseInt(txtDniCliente.getText()));
-    cl.setNombre(txtNombreCliente.getText());
-    cl.setTelefono(Integer.parseInt(txtTelefonoCliente.getText()));
-    cl.setDireccion(txtDireccionCliente.getText());
-    cl.setRazon(txtRazonCliente.getText());
-    client.RegistrarCliente(cl);
+    Clientes c = new Clientes();
+    c.setDni(Integer.parseInt(txtDniCliente.getText()));
+    c.setNombre(txtNombreCliente.getText());
+    c.setTelefono(Integer.parseInt(txtTelefonoCliente.getText()));
+    c.setDireccion(txtDireccionCliente.getText());
+    c.setRazon(txtRazonCliente.getText());
+    c.setFecha(new Date());
 
-    JOptionPane.showMessageDialog(null, "Cliente registrado");
+    try {
+        clientesJpa.create(c);
+        JOptionPane.showMessageDialog(null, "Cliente registrado");
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+    }
 
     LimpiarTable(TableCliente);
     LimpiarCliente();
     ListarCliente();
+
+
 
     }//GEN-LAST:event_btnGuardarClienteActionPerformed
     private void LimpiarCliente() {
@@ -1280,40 +1290,60 @@ txtIdCliente.setVisible(false);
     }//GEN-LAST:event_TableClienteMouseClicked
 
     private void btnEliminarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarClienteActionPerformed
-        if (!"".equals(txtIdCliente.getText())) {
-            int pregunta = JOptionPane.showConfirmDialog(null, "Está seguro de eliminar?");
-            if (pregunta == 0) {
-                int id = Integer.parseInt(txtIdCliente.getText());
-                client.EliminarCliente(id);
-                LimpiarTable(TableCliente);
-                LimpiarCliente();
-                ListarCliente();
-            }
-        }
+
+    if (txtIdCliente.getText().isEmpty()) {
+        return;
+    }
+
+    int pregunta = JOptionPane.showConfirmDialog(null, "¿Está seguro de eliminar?");
+    if (pregunta != 0) {
+        return;
+    }
+
+    try {
+        clientesJpa.destroy(Integer.parseInt(txtIdCliente.getText()));
+        JOptionPane.showMessageDialog(null, "Cliente eliminado");
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+    }
+
+    LimpiarTable(TableCliente);
+    LimpiarCliente();
+    ListarCliente();
+
+
     }//GEN-LAST:event_btnEliminarClienteActionPerformed
 
     private void btnEditarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarClienteActionPerformed
-        if ("".equals(txtIdCliente.getText())) {
-            JOptionPane.showMessageDialog(null, "Seleccione una fila");
-        } else {
 
-            if (!"".equals(txtDniCliente.getText()) && !"".equals(txtNombreCliente.getText()) && !"".equals(txtTelefonoCliente.getText())) {
-                cl.setDni(Integer.parseInt(txtDniCliente.getText()));
-                cl.setNombre(txtNombreCliente.getText());
-                cl.setTelefono(Integer.parseInt(txtTelefonoCliente.getText()));
-                cl.setDireccion(txtDireccionCliente.getText());
-                cl.setRazon(txtRazonCliente.getText());
-                cl.setId(Integer.parseInt(txtIdCliente.getText()));
-                client.ModificarCliente(cl);
-                JOptionPane.showMessageDialog(null, "Cliente modificado");
+    if (txtIdCliente.getText().isEmpty()) {
+        JOptionPane.showMessageDialog(null, "Seleccione una fila");
+        return;
+    }
 
-                LimpiarTable(TableCliente);
-                LimpiarCliente();
-                ListarCliente();
-            } else {
-                JOptionPane.showMessageDialog(null, "Los campos están vacios");
-            }
-        }
+    Clientes c = clientesJpa.findClientes(Integer.parseInt(txtIdCliente.getText()));
+    if (c == null) {
+        JOptionPane.showMessageDialog(null, "Cliente no encontrado");
+        return;
+    }
+
+    c.setDni(Integer.parseInt(txtDniCliente.getText()));
+    c.setNombre(txtNombreCliente.getText());
+    c.setTelefono(Integer.parseInt(txtTelefonoCliente.getText()));
+    c.setDireccion(txtDireccionCliente.getText());
+    c.setRazon(txtRazonCliente.getText());
+
+    try {
+        clientesJpa.edit(c);
+        JOptionPane.showMessageDialog(null, "Cliente modificado");
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+    }
+
+    LimpiarTable(TableCliente);
+    LimpiarCliente();
+    ListarCliente();
+
     }//GEN-LAST:event_btnEditarClienteActionPerformed
 
     private void btnNuevoClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoClienteActionPerformed

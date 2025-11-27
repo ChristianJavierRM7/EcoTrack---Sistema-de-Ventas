@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
+             version="3.0">
+
+    <persistence-unit name="SistemaVenta" transaction-type="RESOURCE_LOCAL">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+
+        <!-- Entidades -->
+        <class>Entidades.Clientes</class>
+        <class>Entidades.Config</class>
+        <class>Entidades.Detalle</class>
+        <class>Entidades.Productos</class>
+        <class>Entidades.Proveedor</class>
+        <class>Entidades.Usuarios</class>
+        <class>Entidades.Ventas</class>
+
+        <properties>
+            <!-- Conexión -->
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3307/sistemaventa?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
+            <property name="jakarta.persistence.jdbc.user" value="root"/>
+            <property name="jakarta.persistence.jdbc.password" value="Pepa123oso@"/>
+            <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+
+            <!-- Opcional: logs -->
+            <property name="eclipselink.logging.level" value="FINE"/>
+        </properties>
+
+    </persistence-unit>
+</persistence>
