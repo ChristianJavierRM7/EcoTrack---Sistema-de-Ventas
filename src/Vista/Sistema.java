@@ -1,5 +1,6 @@
 package Vista;
 
+import Controladores.ClientesJpaController;
 import Modelo.Cliente;
 import Modelo.ClienteDao;
 import Modelo.Config;
@@ -38,12 +39,16 @@ import com.itextpdf.text.Phrase;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import com.itextpdf.text.pdf.PdfPCell;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 import java.awt.Desktop;
 import java.io.IOException;
 import javax.swing.JTable;
 
 
 public class Sistema extends javax.swing.JFrame {
+EntityManagerFactory emf = Persistence.createEntityManagerFactory("SistemaVenta");
+ClientesJpaController clientesJpa = new ClientesJpaController(emf);
 
     Cliente cl = new Cliente();
     ClienteDao client = new ClienteDao();
