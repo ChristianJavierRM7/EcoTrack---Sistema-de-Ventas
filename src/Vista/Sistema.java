@@ -1,16 +1,14 @@
 package Vista;
 
 import Controladores.ClientesJpaController;
+import Controladores.ProveedorJpaController;
 import Entidades.Clientes;
-import Modelo.Cliente;
-import Modelo.ClienteDao;
-import Modelo.Config;
-import Modelo.Detalle;
+import Entidades.Proveedor;
+import Controladores.ProductosJpaController;
+import Entidades.Detalle;
+import Controladores.DetalleJpaController;
 import Modelo.Eventos;
-import Modelo.Productos;
-import Modelo.ProductosDao;
-import Modelo.Proveedor;
-import Modelo.ProveedorDao;
+import Entidades.Productos;
 import Modelo.Venta;
 import Reportes.Excel;
 import java.awt.event.KeyEvent;
@@ -20,7 +18,6 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import Modelo.VentaDao;
-import Modelo.login;
 import Reportes.Grafico;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
@@ -44,23 +41,23 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import java.awt.Desktop;
 import java.io.IOException;
+import java.math.BigDecimal;
 import javax.swing.JTable;
+import Entidades.Config;
+import Controladores.ConfigJpaController;
+import Entidades.Ventas;
+import Controladores.VentasJpaController;
+import Entidades.Usuarios;
 
 
 public class Sistema extends javax.swing.JFrame {
 
 
-    Cliente cl = new Cliente();
-    ClienteDao client = new ClienteDao();
-    Proveedor pr = new Proveedor();
-    ProveedorDao PrDao = new ProveedorDao();
-    Productos pro = new Productos();
-    ProductosDao proDao = new ProductosDao();
     Date fechaVenta = new Date();
     String fechaActual = new SimpleDateFormat("dd-MM-yyyy").format(fechaVenta);
     Venta v = new Venta();
     VentaDao Vdao = new VentaDao();
-    Detalle Dv = new Detalle();
+  
     Config conf= new Config();
     Eventos event = new Eventos();
     DefaultTableModel modelo = new DefaultTableModel();
@@ -70,13 +67,24 @@ public class Sistema extends javax.swing.JFrame {
     double Totalpagar = 0.00;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Sistema.class.getName());
     private ClientesJpaController clientesJpa;
-
+    private ProveedorJpaController proveedorJpa;
+    private ProductosJpaController productosJpa;
+    private ConfigJpaController configJpa;
+    private VentasJpaController ventasJpa;
+    private DetalleJpaController detalleJpa;
+    
     public Sistema() {
         
         initComponents();
         setLocationRelativeTo(null);
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("SistemaVenta");
     this.clientesJpa = new ClientesJpaController(emf);  // ← CORRECTO
+    this.proveedorJpa = new ProveedorJpaController(emf);
+    this.productosJpa = new ProductosJpaController(emf);
+    this.configJpa = new ConfigJpaController(emf);
+    this.ventasJpa = new VentasJpaController(emf);
+    this.detalleJpa = new DetalleJpaController(emf);
+    CrearConfigInicial();
 txtIdCliente.setVisible(false);
 
         jTabbedPane1.setEnabled(false);
@@ -87,33 +95,113 @@ txtIdCliente.setVisible(false);
         txtTelefonoCV.setVisible(false);
         txtDireccionCV.setVisible(false);
         AutoCompleteDecorator.decorate(cbxProveedorPro);
-        proDao.ConsultarProveedor(cbxProveedorPro);
+cargarProveedoresEnCombo();
         txtIdConfig.setVisible(false);
     }
 
-       public Sistema(login priv){
-           initComponents();
-            this.setLocationRelativeTo(null);
-           
-        txtIdCliente.setVisible(false);
-        txtIdVenta.setVisible(false);
-        txtIdPro.setVisible(false);
-        jTabbedPane1.setEnabled(false);
+     public Sistema(Usuarios usuario) {
+    initComponents();
+    setLocationRelativeTo(null);
+
+   
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("SistemaVenta");
+    this.clientesJpa = new ClientesJpaController(emf);
+    this.proveedorJpa = new ProveedorJpaController(emf);
+    this.productosJpa = new ProductosJpaController(emf);
+    this.configJpa = new ConfigJpaController(emf);
+    this.ventasJpa = new VentasJpaController(emf);
+    this.detalleJpa = new DetalleJpaController(emf);
+
+    
+    LabelVendedor.setText(usuario.getNombre());
+
+  
+    if (usuario.getRol().equals("Asistente")) {
+        btnProductos.setEnabled(false);
+        btnProveedor.setEnabled(false);
+    }
+
+ 
+    txtIdCliente.setVisible(false);
+    txtIdVenta.setVisible(false);
+    txtIdPro.setVisible(false);
+    txtIdProveedor.setVisible(false);
+    txtIdConfig.setVisible(false);
+}
+
+   
+
+private int RegistrarVentaJPA() {
+    try {
+        Ventas v = new Ventas();
         
-        txtIdProveedor.setVisible(false);
-        AutoCompleteDecorator.decorate(cbxProveedorPro);
-        proDao.ConsultarProveedor(cbxProveedorPro);
-        txtIdConfig.setVisible(false);
-        
-        if(priv.getRol().equals("Asistente")){
-            btnProductos.setEnabled(false);
-            btnProveedor.setEnabled(false);
-            LabelVendedor.setText(priv.getNombre());
-        }else{
-            LabelVendedor.setText(priv.getNombre());
+        v.setCliente(txtNombreClienteventa.getText());
+        v.setVendedor(txtVendedor.getText());
+        v.setFecha(fechaActual);
+        v.setTotal(BigDecimal.valueOf(Totalpagar));
+
+        ventasJpa.create(v);
+
+        return v.getId();  // ← ya JPA devuelve el ID autogenerado
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error al registrar venta: " + e.getMessage());
+        return -1;
+    }
+}
+
+private void ActualizarStockJPA(){
+    for (int i = 0; i < TablaVenta.getRowCount(); i++) {
+        String cod = TablaVenta.getValueAt(i, 0).toString().trim();
+        int cant = Integer.parseInt(TablaVenta.getValueAt(i, 2).toString());
+
+        try {
+            Productos producto = productosJpa.findByCodigo(cod); // <-- usa el nuevo método
+
+            if (producto == null) {
+                // producto no encontrado: opcionalmente mostrar error o continuar
+                JOptionPane.showMessageDialog(this, "Producto con código " + cod + " no encontrado. Stock no actualizado.");
+                continue;
+            }
+
+            int nuevoStock = producto.getStock() - cant;
+            if (nuevoStock < 0) {
+                JOptionPane.showMessageDialog(this, "Stock insuficiente para el producto " + producto.getNombre());
+                // decide: saltar, poner en 0 o abortar; aquí lo saltamos
+                continue;
+            }
+
+            producto.setStock(nuevoStock);
+
+            try {
+                productosJpa.edit(producto); // merge y commit dentro del controller
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Error al actualizar stock del producto " + cod + ": " + e.getMessage());
+            }
+
+        } catch (NumberFormatException nfe) {
+            JOptionPane.showMessageDialog(this, "Cantidad inválida en la fila " + i);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error inesperado al actualizar stock: " + ex.getMessage());
         }
     }
-    
+}
+
+private void RegistrarDetalleJPA(int idVenta) {
+
+    for (int i = 0; i < TablaVenta.getRowCount(); i++) {
+
+        Detalle d = new Detalle();
+
+        d.setIdVenta(String.valueOf(idVenta));
+        d.setCodPro(TablaVenta.getValueAt(i, 0).toString());
+        d.setCantidad(TablaVenta.getValueAt(i, 2).toString());
+        d.setPrecio(new BigDecimal(TablaVenta.getValueAt(i, 3).toString()));
+
+        detalleJpa.create(d);
+    }
+}
+
+       
  public void ListarCliente() {
     List<Clientes> lista = clientesJpa.findClientesEntities();
     modelo = (DefaultTableModel) TableCliente.getModel();
@@ -131,37 +219,58 @@ txtIdCliente.setVisible(false);
     TableCliente.setModel(modelo);
 }
 
-    public void ListarProveedor() {
-        List<Proveedor> ListarPr = PrDao.ListarProveedor();
-        modelo = (DefaultTableModel) TableProveedor.getModel();
-        Object[] ob = new Object[6];
-        for (int i = 0; i < ListarPr.size(); i++) {
-            ob[0] = ListarPr.get(i).getId();
-            ob[1] = ListarPr.get(i).getRuc();
-            ob[2] = ListarPr.get(i).getNombre();
-            ob[3] = ListarPr.get(i).getTelefono();
-            ob[4] = ListarPr.get(i).getDireccion();
-            ob[5] = ListarPr.get(i).getRazon();
-            modelo.addRow(ob);
-        }
-        TableProveedor.setModel(modelo);
+ private void cargarProveedoresEnCombo() {
+    cbxProveedorPro.removeAllItems(); 
+
+    List<Proveedor> lista = proveedorJpa.findProveedorEntities();
+
+    for (Proveedor p : lista) {
+        cbxProveedorPro.addItem(p.getNombre());
     }
+}
+
+ 
+public void ListarProveedor() {
+
+    List<Proveedor> lista = proveedorJpa.findProveedorEntities();
+
+    modelo = (DefaultTableModel) TableProveedor.getModel();
+    modelo.setRowCount(0);
+
+    Object[] ob = new Object[6];
+
+    for (Proveedor p : lista) {
+        ob[0] = p.getId();
+        ob[1] = p.getRuc();
+        ob[2] = p.getNombre();
+        ob[3] = p.getTelefono();
+        ob[4] = p.getDireccion();
+        ob[5] = p.getRazon();
+        modelo.addRow(ob);
+    }
+
+    TableProveedor.setModel(modelo);
+}
+
     
-       public void ListarProductos()  {
-        List<Productos> ListarPro = proDao.ListarProductos();
-        modelo = (DefaultTableModel) TableProducto.getModel();
-        Object[] ob = new Object[6];
-        for (int i = 0; i < ListarPro.size(); i++) {
-            ob[0] = ListarPro.get(i).getId();
-            ob[1] = ListarPro.get(i).getCodigo();
-            ob[2] = ListarPro.get(i).getNombre();
-            ob[3] = ListarPro.get(i).getProveedor();
-            ob[4] = ListarPro.get(i).getStock();
-            ob[5] = ListarPro.get(i).getPrecio();
-            modelo.addRow(ob);
-        }
-        TableProducto.setModel(modelo);
+public void ListarProductos() {
+    List<Productos> lista = productosJpa.findProductosEntities();
+    modelo = (DefaultTableModel) TableProducto.getModel();
+    modelo.setRowCount(0);
+
+    Object[] fila = new Object[6];
+
+    for (Productos p : lista) {
+        fila[0] = p.getId();
+        fila[1] = p.getCodigo();
+        fila[2] = p.getNombre();
+        fila[3] = p.getProveedor();
+        fila[4] = p.getStock();
+        fila[5] = p.getPrecio();
+        modelo.addRow(fila);
     }
+}
+
        
     public void ListarVentas()  {
         List<Venta> ListarVenta = Vdao.Listarventas();
@@ -238,6 +347,7 @@ txtIdCliente.setVisible(false);
         jLabel37 = new javax.swing.JLabel();
         jLabel38 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
+        txtVendedor = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
@@ -584,7 +694,7 @@ txtIdCliente.setVisible(false);
 
         jLabel34.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         jLabel34.setText("Ventas");
-        jPanel2.add(jLabel34, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 140, 110, -1));
+        jPanel2.add(jLabel34, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 140, 110, -1));
 
         jLabel36.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel36.setText("Datos del cliente:");
@@ -596,10 +706,11 @@ txtIdCliente.setVisible(false);
 
         jLabel38.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         jLabel38.setText("Módulo de ");
-        jPanel2.add(jLabel38, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 60, 190, -1));
+        jPanel2.add(jLabel38, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, 190, -1));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Carrito-de-compras.png"))); // NOI18N
-        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 110, 40, 40));
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 100, 40, 40));
+        jPanel2.add(txtVendedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 10, 10, -1));
 
         jTabbedPane1.addTab("Ventas", jPanel2);
 
@@ -972,7 +1083,7 @@ txtIdCliente.setVisible(false);
             TableProducto.getColumnModel().getColumn(5).setPreferredWidth(50);
         }
 
-        jPanel5.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 130, 640, 280));
+        jPanel5.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 920, 280));
 
         btnGuardarpro.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnGuardarpro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/GuardarTodo.png"))); // NOI18N
@@ -1027,14 +1138,14 @@ txtIdCliente.setVisible(false);
 
         jLabel53.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         jLabel53.setText("Módulo de ");
-        jPanel5.add(jLabel53, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 80, 190, -1));
+        jPanel5.add(jLabel53, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 10, 190, -1));
 
         jLabel54.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/proveedor.png"))); // NOI18N
-        jPanel5.add(jLabel54, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 130, 40, 40));
+        jPanel5.add(jLabel54, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 40, 40, 40));
 
         jLabel55.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         jLabel55.setText("Productos");
-        jPanel5.add(jLabel55, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 170, 170, 50));
+        jPanel5.add(jLabel55, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 60, 170, 50));
 
         jTabbedPane1.addTab("Productos", jPanel5);
 
@@ -1062,7 +1173,7 @@ txtIdCliente.setVisible(false);
             TableVentas.getColumnModel().getColumn(3).setPreferredWidth(60);
         }
 
-        jPanel6.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 70, 670, 340));
+        jPanel6.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 170, 900, 240));
 
         btnPdfVentas.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         btnPdfVentas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/pdf.png"))); // NOI18N
@@ -1072,30 +1183,30 @@ txtIdCliente.setVisible(false);
                 btnPdfVentasActionPerformed(evt);
             }
         });
-        jPanel6.add(btnPdfVentas, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 270, 210, 60));
+        jPanel6.add(btnPdfVentas, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 80, 210, 60));
         jPanel6.add(txtIdVenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 0, 10, -1));
 
         jLabel13.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel13.setText("Seleccione la venta a ser reimprimida:");
-        jPanel6.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 30, -1, -1));
+        jPanel6.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 130, -1, -1));
 
         jLabel45.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         jLabel45.setText("Reimpresión de");
-        jPanel6.add(jLabel45, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 260, -1));
+        jPanel6.add(jLabel45, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 260, -1));
 
         jLabel46.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/producto.png"))); // NOI18N
-        jPanel6.add(jLabel46, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 100, 40, 40));
+        jPanel6.add(jLabel46, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 50, 40, 40));
 
         jLabel47.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         jLabel47.setText("Ventas");
-        jPanel6.add(jLabel47, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 180, -1, -1));
+        jPanel6.add(jLabel47, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 120, -1, -1));
 
         jLabel48.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         jLabel48.setText("Facturas de");
-        jPanel6.add(jLabel48, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, 200, -1));
+        jPanel6.add(jLabel48, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 70, 200, -1));
 
         jLabel49.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/pdf.png"))); // NOI18N
-        jPanel6.add(jLabel49, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 100, 40, 40));
+        jPanel6.add(jLabel49, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 50, 40, 40));
 
         jTabbedPane1.addTab("Ventas", jPanel6);
 
@@ -1351,21 +1462,38 @@ txtIdCliente.setVisible(false);
     }//GEN-LAST:event_btnNuevoClienteActionPerformed
 
     private void btnguardarProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnguardarProveedorActionPerformed
-    if(!"".equals(txtRucProveedor.getText()) || !"".equals(txtNombreproveedor.getText()) || !"".equals(txtTelefonoProveedor.getText()) || !"".equals(txtDireccionProveedor.getText()) || !"".equals(txtRazonProveedor.getText())){
-        pr.setRuc(Integer.parseInt(txtRucProveedor.getText()));
-        pr.setNombre(txtNombreproveedor.getText());
-        pr.setTelefono(Integer.parseInt(txtTelefonoProveedor.getText()));
-        pr.setDireccion(txtDireccionProveedor.getText());
-        pr.setRazon(txtRazonProveedor.getText());
-        PrDao.RegistrarProveedor(pr);
+
+        if (txtRucProveedor.getText().isEmpty() ||
+        txtNombreproveedor.getText().isEmpty() ||
+        txtTelefonoProveedor.getText().isEmpty() ||
+        txtDireccionProveedor.getText().isEmpty() ||
+        txtRazonProveedor.getText().isEmpty()) {
+
+        JOptionPane.showMessageDialog(null, "Los campos no pueden estar vacíos");
+        return;
+    }
+
+    try {
+        Proveedor p = new Proveedor();
+        p.setRuc(Integer.parseInt(txtRucProveedor.getText()));
+        p.setNombre(txtNombreproveedor.getText());
+        p.setTelefono(Integer.parseInt(txtTelefonoProveedor.getText()));
+        p.setDireccion(txtDireccionProveedor.getText());
+        p.setRazon(txtRazonProveedor.getText());
+        p.setFecha(new Date());
+
+        proveedorJpa.create(p);
+
         JOptionPane.showMessageDialog(null, "Proveedor registrado");
 
         LimpiarTable(TableProveedor);
         ListarProveedor();
         LimpiarProveedor();
-    }else{
-        JOptionPane.showMessageDialog(null, "Los campos no pueden estar vacios");
+
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(null, "Error al registrar proveedor: " + ex.getMessage());
     }
+
     }//GEN-LAST:event_btnguardarProveedorActionPerformed
 
     private void btnProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProveedorActionPerformed
@@ -1385,39 +1513,59 @@ txtIdCliente.setVisible(false);
     }//GEN-LAST:event_TableProveedorMouseClicked
 
     private void btnEliminarProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarProveedorActionPerformed
-        if(!"".equals(txtIdProveedor.getText())){
-            int pregunta = JOptionPane.showConfirmDialog(null, "Está seguro de eliminar?");
-            if(pregunta==0){
-                int id =Integer.parseInt(txtIdProveedor.getText());
-                PrDao.EliminarProveedor(id);
-                LimpiarTable(TableProveedor);
-                ListarProveedor();
-                LimpiarProveedor();
-            }
-        }else{
-            JOptionPane.showMessageDialog(null, "Seleccione una fila");
+    if (txtIdProveedor.getText().isEmpty()) {
+        JOptionPane.showMessageDialog(null, "Seleccione una fila");
+        return;
+    }
+
+    int pregunta = JOptionPane.showConfirmDialog(null, "¿Está seguro de eliminar?");
+
+    if (pregunta == 0) {
+        try {
+            int id = Integer.parseInt(txtIdProveedor.getText());
+            proveedorJpa.destroy(id);
+
+            LimpiarTable(TableProveedor);
+            ListarProveedor();
+            LimpiarProveedor();
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Error al eliminar proveedor: " + ex.getMessage());
         }
+    }
     }//GEN-LAST:event_btnEliminarProveedorActionPerformed
 
     private void btnEditarProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarProveedorActionPerformed
-        if("".equals(txtIdProveedor.getText())){
-            JOptionPane.showMessageDialog(null, "Seleccione una fila");
-        }else{
-            if(!"".equals(txtRucProveedor.getText()) || !"".equals(txtNombreproveedor.getText()) || !"".equals(txtTelefonoProveedor.getText()) || !"".equals(txtDireccionProveedor.getText()) || !"".equals(txtRazonProveedor.getText())){
-                pr.setRuc(Integer.parseInt(txtRucProveedor.getText()));
-                pr.setNombre(txtNombreproveedor.getText());
-                pr.setTelefono(Integer.parseInt(txtTelefonoProveedor.getText()));
-                pr.setDireccion(txtDireccionProveedor.getText());
-                pr.setRazon(txtRazonProveedor.getText());
-                pr.setId(Integer.parseInt(txtIdProveedor.getText()));
-                PrDao.ModificarProveedor(pr);
-                JOptionPane.showMessageDialog(null, "Proveedor modificado");
+    if (txtIdProveedor.getText().isEmpty()) {
+        JOptionPane.showMessageDialog(null, "Seleccione una fila");
+        return;
+    }
 
-                LimpiarTable(TableProveedor);
-                ListarProveedor();
-                LimpiarProveedor();
-            }
+    try {
+        Proveedor p = proveedorJpa.findProveedor(Integer.parseInt(txtIdProveedor.getText()));
+
+        if (p == null) {
+            JOptionPane.showMessageDialog(null, "El proveedor no existe");
+            return;
         }
+
+        p.setRuc(Integer.parseInt(txtRucProveedor.getText()));
+        p.setNombre(txtNombreproveedor.getText());
+        p.setTelefono(Integer.parseInt(txtTelefonoProveedor.getText()));
+        p.setDireccion(txtDireccionProveedor.getText());
+        p.setRazon(txtRazonProveedor.getText());
+
+        proveedorJpa.edit(p);
+
+        JOptionPane.showMessageDialog(null, "Proveedor modificado");
+
+        LimpiarTable(TableProveedor);
+        ListarProveedor();
+        LimpiarProveedor();
+
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(null, "Error al modificar proveedor: " + ex.getMessage());
+    }
     }//GEN-LAST:event_btnEditarProveedorActionPerformed
 
     private void btnNuevoProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoProveedorActionPerformed
@@ -1425,19 +1573,35 @@ txtIdCliente.setVisible(false);
     }//GEN-LAST:event_btnNuevoProveedorActionPerformed
 
     private void btnGuardarproActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarproActionPerformed
-        if(!"".equals(txtCodigoPro.getText()) || !"".equals(txtDesPro.getText()) || !"".equals(cbxProveedorPro.getSelectedItem())|| !"".equals(txtCantPro.getText()) || !"".equals(txtPrecioPro.getText())){
-            pro.setCodigo(txtCodigoPro.getText());
-            pro.setNombre(txtDesPro.getText());
-            pro.setProveedor(cbxProveedorPro.getSelectedItem().toString());
-            pro.setStock(Integer.parseInt(txtCantPro.getText()));
-            pro.setPrecio(Double.parseDouble(txtPrecioPro.getText()));
-            proDao.RegistrarProductos(pro);
-            JOptionPane.showMessageDialog(null, "Producto registrado");
-            LimpiarTable(TableProducto);
-            ListarProductos();
-        }else{
-            JOptionPane.showMessageDialog(null, "Los campos no pueden estar vacíos");
-        }
+    if (txtCodigoPro.getText().isEmpty()
+        || txtDesPro.getText().isEmpty()
+        || txtCantPro.getText().isEmpty()
+        || txtPrecioPro.getText().isEmpty()) {
+
+        JOptionPane.showMessageDialog(null, "Los campos no pueden estar vacíos");
+        return;
+    }
+
+    try {
+        Productos p = new Productos();
+        p.setCodigo(txtCodigoPro.getText());
+        p.setNombre(txtDesPro.getText());
+        p.setProveedor(cbxProveedorPro.getSelectedItem().toString());
+        p.setStock(Integer.parseInt(txtCantPro.getText()));
+        p.setPrecio(new BigDecimal(txtPrecioPro.getText()));
+        p.setFecha(new Date()); // JPA reconoce @Temporal
+
+        productosJpa.create(p);
+
+        JOptionPane.showMessageDialog(null, "Producto registrado correctamente");
+
+        LimpiarTable(TableProducto);
+        ListarProductos();
+        LimpiarProductos();
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Error al registrar: " + e.getMessage());
+    }
     }//GEN-LAST:event_btnGuardarproActionPerformed
 
     private void btnProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductosActionPerformed
@@ -1457,37 +1621,63 @@ txtIdCliente.setVisible(false);
     }//GEN-LAST:event_TableProductoMouseClicked
 
     private void btnEliminarProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarProActionPerformed
-        if (!"".equals(txtIdPro.getText())) {
-            int pregunta = JOptionPane.showConfirmDialog(null, "Está seguro de eliminar?");
-            if (pregunta == 0) {
-                int id = Integer.parseInt(txtIdPro.getText());
-proDao.EliminarProductos(id);
+    if (txtIdPro.getText().isEmpty()) {
+        JOptionPane.showMessageDialog(null, "Seleccione un producto");
+        return;
+    }
+
+    int pregunta = JOptionPane.showConfirmDialog(null, "¿Desea eliminar este producto?");
+    if (pregunta != 0) {
+        return;
+    }
+
+    try {
+        int id = Integer.parseInt(txtIdPro.getText());
+        productosJpa.destroy(id);
+
+        JOptionPane.showMessageDialog(null, "Producto eliminado correctamente");
+
         LimpiarTable(TableProducto);
-                LimpiarProductos();
-                ListarProductos();
-            }
-        }
+        ListarProductos();
+        LimpiarProductos();
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Error al eliminar: " + e.getMessage());
+    }
     }//GEN-LAST:event_btnEliminarProActionPerformed
 
     private void btnEditarproActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarproActionPerformed
-         if("".equals(txtIdPro.getText())){
-            JOptionPane.showMessageDialog(null, "Seleccione una fila");
-        }else{
-            if(!"".equals(txtCodigoPro.getText()) || !"".equals(txtDesPro.getText()) || !"".equals(txtCantPro.getText()) || !"".equals(txtPrecioPro.getText())){
-                pro.setCodigo(txtCodigoPro.getText());
-                pro.setNombre(txtDesPro.getText());
-                pro.setProveedor(cbxProveedorPro.getSelectedItem().toString());
-                pro.setStock(Integer.parseInt(txtCantPro.getText()));
-                pro.setPrecio(Double.parseDouble(txtPrecioPro.getText()));
-                pro.setId(Integer.parseInt(txtIdPro.getText()));
-                proDao.ModificarProductos(pro);
-                JOptionPane.showMessageDialog(null, "Producto modificado");
+    if (txtIdPro.getText().isEmpty()) {
+        JOptionPane.showMessageDialog(null, "Seleccione un producto de la tabla");
+        return;
+    }
 
-                LimpiarTable(TableProducto);
-                ListarProductos();
-                LimpiarProductos();
-            }
+    try {
+        Productos p = productosJpa.findProductos(Integer.parseInt(txtIdPro.getText()));
+
+        if (p == null) {
+            JOptionPane.showMessageDialog(null, "El producto no existe");
+            return;
         }
+
+        p.setCodigo(txtCodigoPro.getText());
+        p.setNombre(txtDesPro.getText());
+        p.setProveedor(cbxProveedorPro.getSelectedItem().toString());
+        p.setStock(Integer.parseInt(txtCantPro.getText()));
+        p.setPrecio(new BigDecimal(txtPrecioPro.getText()));
+        p.setFecha(new Date());
+
+        productosJpa.edit(p);
+
+        JOptionPane.showMessageDialog(null, "Producto modificado correctamente");
+
+        LimpiarTable(TableProducto);
+        ListarProductos();
+        LimpiarProductos();
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Error al modificar: " + e.getMessage());
+    }
     }//GEN-LAST:event_btnEditarproActionPerformed
 
     private void btnExcelProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcelProActionPerformed
@@ -1500,24 +1690,32 @@ proDao.EliminarProductos(id);
     }//GEN-LAST:event_btnNuevoProActionPerformed
 
     private void txtCodigoVentaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoVentaKeyPressed
-        if(evt.getKeyCode()==KeyEvent.VK_ENTER){
-            if(!"".equals(txtCodigoVenta.getText())){
-                String cod = txtCodigoVenta.getText();
-                pro = proDao.BuscarPro(cod);
-                if(pro.getNombre()!=null){
-                    txtDescripcionVenta.setText(""+pro.getNombre());
-                    txtPrecioVenta.setText(""+pro.getPrecio());
-                    txtStockDisponible.setText(""+pro.getStock());
-                    txtCantidadVenta.requestFocus();
-                }else{
-                   LimpiarVenta();
-                    txtCodigoVenta.requestFocus();
-                }
-            }else{
-                JOptionPane.showMessageDialog(null, "Ingrese el codigo del producto");
+    if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+
+        if (!"".equals(txtCodigoVenta.getText())) {
+
+            String cod = txtCodigoVenta.getText();
+
+      
+            Productos pro = productosJpa.findByCodigo(cod);
+
+            if (pro != null) {
+                txtDescripcionVenta.setText(pro.getNombre());
+                txtPrecioVenta.setText(pro.getPrecio().toString());
+                txtStockDisponible.setText(String.valueOf(pro.getStock()));
+                txtCantidadVenta.requestFocus();
+            } else {
+                LimpiarVenta();
+                JOptionPane.showMessageDialog(null, "Producto no encontrado");
                 txtCodigoVenta.requestFocus();
             }
+
+        } else {
+            JOptionPane.showMessageDialog(null, "Ingrese el código del producto");
+            txtCodigoVenta.requestFocus();
         }
+    }
+
     }//GEN-LAST:event_txtCodigoVentaKeyPressed
 
     private void txtCantidadVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCantidadVentaActionPerformed
@@ -1577,39 +1775,65 @@ proDao.EliminarProductos(id);
     }//GEN-LAST:event_btnEliminarventaActionPerformed
 
     private void txtRucVentaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRucVentaKeyPressed
-        if(evt.getKeyCode()==KeyEvent.VK_ENTER){
-            if(!"".equals(txtRucVenta.getText())){
+    if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+
+        if (!"".equals(txtRucVenta.getText())) {
+
+            try {
                 int dni = Integer.parseInt(txtRucVenta.getText());
-                cl=client.Buscarcliente(dni);
-                if(cl.getNombre() != null){
-                    txtNombreClienteventa.setText(""+cl.getNombre());
-                    txtTelefonoCV.setText(""+cl.getTelefono());
-                    txtDireccionCV.setText(""+cl.getDireccion());
-                    txtRazonCV.setText(""+cl.getRazon());
-                }else{
+
+                // Buscar usando JPA
+                Clientes clienteJpa = clientesJpa.findByDni(dni);
+
+                if (clienteJpa != null) {
+                    txtNombreClienteventa.setText(clienteJpa.getNombre());
+                    txtTelefonoCV.setText(String.valueOf(clienteJpa.getTelefono()));
+                    txtDireccionCV.setText(clienteJpa.getDireccion());
+                    txtRazonCV.setText(clienteJpa.getRazon());
+                } else {
                     txtRucVenta.setText("");
                     JOptionPane.showMessageDialog(null, "El cliente no existe");
                 }
+
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "RUC inválido");
             }
         }
+    }
+
     }//GEN-LAST:event_txtRucVentaKeyPressed
 
     private void btnGenerarVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarVentaActionPerformed
-        if (TablaVenta.getRowCount()>0) {
-            if(!"".equals(txtNombreClienteventa.getText())){
-        RegistrarVenta();
-        RegistrarDetalle();
-        ActualizarStock();
-        pdf();
-        LimpiarTablaVenta();
-        LimpiarClienteVenta();   
-            }else{
-                JOptionPane.showMessageDialog(null, "Debes buscar un cliente");
-            }
-        }else{
-            JOptionPane.showMessageDialog(null, "No hay productos dentro de la venta");
-        }
-       
+
+    if (TablaVenta.getRowCount() == 0) {
+        JOptionPane.showMessageDialog(this, "No hay productos en la venta");
+        return;
+    }
+
+    if ("".equals(txtNombreClienteventa.getText())) {
+        JOptionPane.showMessageDialog(this, "Debes buscar un cliente");
+        return;
+    }
+
+    // 1. Registrar venta
+    int idVenta = RegistrarVentaJPA();
+    if (idVenta == -1) return;
+
+    // 2. Registrar detalle
+    RegistrarDetalleJPA(idVenta);
+
+    // 3. Actualizar stock
+    ActualizarStockJPA();
+
+    // 4. PDF
+    pdf();
+
+    // 5. Limpiar
+    LimpiarTablaVenta();
+    LimpiarClienteVenta();
+
+    JOptionPane.showMessageDialog(this, "Venta registrada correctamente");
+
     }//GEN-LAST:event_btnGenerarVentaActionPerformed
 
     private void btnNuevaVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaVentaActionPerformed
@@ -1643,20 +1867,53 @@ proDao.EliminarProductos(id);
     }//GEN-LAST:event_txtPrecioProKeyTyped
 
     private void btnActualizarConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarConfigActionPerformed
-        if (!"".equals(txtRucConfig.getText()) && !"".equals(txtNombreConfig.getText()) && !"".equals(txtTelefonoCliente.getText()) && !"".equals(txtDireccionConfig.getText())) {
-                conf.setRuc(Integer.parseInt(txtRucConfig.getText()));
-                conf.setNombre(txtNombreConfig.getText());
-                conf.setTelefono(Integer.parseInt(txtTelefonoConfig.getText()));
-                conf.setDireccion(txtDireccionConfig.getText());
-                conf.setRazon(txtRazonConfig.getText());
-                conf.setId(Integer.parseInt(txtIdConfig.getText()));
-                proDao.ModificarDatos(conf);
-                JOptionPane.showMessageDialog(null, "Datos de la empresa modificados");
-                ListarConfig();
-            } else {
-                JOptionPane.showMessageDialog(null, "Los campos están vacios");
-            }
+    try {
+        // Obtener siempre el registro existente
+        Config c = configJpa.findConfig(1);  
+
+        if (c == null) {
+            JOptionPane.showMessageDialog(null, 
+                "No existe configuración inicial. Debes crearla primero.");
+            return;
+        }
+
+        // Actualizar campos
+        c.setRuc(txtRucConfig.getText());
+        c.setNombre(txtNombreConfig.getText());
+        c.setTelefono(Integer.parseInt(txtTelefonoConfig.getText()));
+        c.setDireccion(txtDireccionConfig.getText());
+        c.setRazon(txtRazonConfig.getText());
+
+        // Persistir en BD
+        configJpa.edit(c);
+
+        JOptionPane.showMessageDialog(null, "Datos de configuración actualizados");
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
+    }
+
+
     }//GEN-LAST:event_btnActualizarConfigActionPerformed
+private void CrearConfigInicial() {
+
+    // Verificar si existe
+    if (configJpa.findConfig(1) == null) {
+
+        Config c = new Config();
+        c.setNombre("");
+        c.setRuc("");
+        c.setTelefono(0);
+        c.setDireccion("");
+        c.setRazon("");
+
+        try {
+            configJpa.create(c);
+        } catch (Exception e) {
+            System.out.println("Error creando config inicial: " + e.getMessage());
+        }
+    }
+}
 
     private void btnVentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVentasActionPerformed
         jTabbedPane1.setSelectedIndex(4);
@@ -1866,15 +2123,8 @@ char c = evt.getKeyChar();
 }
 
     
-    private void ActualizarStock(){
-        for (int i = 0; i < TablaVenta.getRowCount(); i++) {
-            String cod = TablaVenta.getValueAt(i, 0).toString();
-            int cant=Integer.parseInt(TablaVenta.getValueAt(i, 2).toString());
-            pro = proDao.BuscarPro(cod);
-            int StockActual = pro.getStock() - cant;
-            Vdao.ActualizarStock(StockActual, cod);
-        }
-    }
+
+
     
     private void LimpiarVenta(){
         txtCodigoVenta.setText("");
@@ -1896,21 +2146,7 @@ char c = evt.getKeyChar();
         Vdao.RegistrarVenta(v);
     }
     
-    private void RegistrarDetalle(){
-        
-        int id=Vdao.IdVenta();
-        
-        for (int i = 0; i < TablaVenta.getRowCount(); i++) {
-            String cod = TablaVenta.getValueAt(i, 0).toString();
-            int cant = Integer.parseInt(TablaVenta.getValueAt(i, 2).toString());
-            double precio = Double.parseDouble(TablaVenta.getValueAt(i, 3).toString());
-            Dv.setCod_pro(cod);
-            Dv.setCantidad(cant);
-            Dv.setPrecio(precio);
-            Dv.setId(id);
-            Vdao.RegistrarDetalle(Dv);
-        }
-    }
+
     
     private void LimpiarTablaVenta(){
          tmp=(DefaultTableModel) TablaVenta.getModel();
@@ -1928,15 +2164,20 @@ char c = evt.getKeyChar();
         txtRazonCV.setText("");
     }
     
-    public void ListarConfig(){
-        conf = proDao.BuscarDatos();
-        txtIdConfig.setText(""+conf.getId());
-        txtRucConfig.setText(""+conf.getRuc());
-        txtNombreConfig.setText(""+conf.getNombre());
-        txtTelefonoConfig.setText(""+conf.getTelefono());
-        txtDireccionConfig.setText(""+conf.getDireccion());
-        txtRazonConfig.setText(""+conf.getRazon());
+   public void ListarConfig(){
+    Config conf = configJpa.findConfig(1); // Siempre leer el ID fijo
+
+    if (conf != null) {
+        txtRucConfig.setText(conf.getRuc());
+        txtNombreConfig.setText(conf.getNombre());
+        txtTelefonoConfig.setText(String.valueOf(conf.getTelefono()));
+        txtDireccionConfig.setText(conf.getDireccion());
+        txtRazonConfig.setText(conf.getRazon());
     }
+}
+
+
+
     
     private void pdf(){
         try {
@@ -2227,6 +2468,7 @@ char c = evt.getKeyChar();
     private javax.swing.JTextField txtTelefonoCliente;
     private javax.swing.JTextField txtTelefonoConfig;
     private javax.swing.JTextField txtTelefonoProveedor;
+    private javax.swing.JTextField txtVendedor;
     // End of variables declaration//GEN-END:variables
 
 }

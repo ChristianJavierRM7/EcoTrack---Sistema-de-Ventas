@@ -1,73 +1,79 @@
 package Vista;
 
-import Modelo.LoginDAO;
-import Modelo.login;
+import Controladores.UsuariosJpaController;
+import Entidades.Usuarios;
 import javax.swing.JOptionPane;
+import jakarta.persistence.EntityManagerFactory;
 
 public class Registro extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Registro.class.getName());
-login lg = new login();
-LoginDAO login = new LoginDAO();
-   
+
+       private UsuariosJpaController usuariosJpa;
+
     public Registro() {
         initComponents();
         this.setLocationRelativeTo(null);
-        this.ocultarPassReg.setVisible(false);
-        this.ocultarRegPassConf.setVisible(false);
+jakarta.persistence.EntityManagerFactory emf =
+        jakarta.persistence.Persistence.createEntityManagerFactory("SistemaVenta");
+
+        usuariosJpa = new UsuariosJpaController(emf);
+
+        ocultarPassReg.setVisible(false);
+        ocultarRegPassConf.setVisible(false);
     }
     
-public void validar() {
-    String correo = txtCorreo.getText().trim();
-    String pass = String.valueOf(txtPass.getPassword());
-    String confPass = String.valueOf(txtConfPass.getPassword());
-    String nom = txtNombre.getText().trim();
-    String rol = cbxRol.getSelectedItem().toString();
+ public void validar() {
+        String correo = txtCorreo.getText().trim();
+        String pass = new String(txtPass.getPassword());
+        String confPass = new String(txtConfPass.getPassword());
+        String nombre = txtNombre.getText().trim();
+        String rol = cbxRol.getSelectedItem().toString();
 
-    // 1️⃣ Validar campos vacíos
-    if (correo.isEmpty() || pass.isEmpty() || confPass.isEmpty() || nom.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios");
-        return;
+        if (correo.isEmpty() || pass.isEmpty() || confPass.isEmpty() || nombre.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios");
+            return;
+        }
+
+        if (!correo.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+            JOptionPane.showMessageDialog(this, "Correo inválido");
+            return;
+        }
+
+        if (pass.length() < 6) {
+            JOptionPane.showMessageDialog(this, "La contraseña debe tener al menos 6 caracteres");
+            return;
+        }
+
+        if (!pass.equals(confPass)) {
+            JOptionPane.showMessageDialog(this, "Las contraseñas no coinciden");
+            return;
+        }
+
+        if (rol.equals("Seleccionar")) {
+            JOptionPane.showMessageDialog(this, "Seleccione un rol válido");
+            return;
+        }
+
+        // Crear el usuario
+        Usuarios nuevo = new Usuarios();
+        nuevo.setNombre(nombre);
+        nuevo.setCorreo(correo);
+        nuevo.setPass(pass);
+        nuevo.setRol(rol);
+
+        try {
+            usuariosJpa.create(nuevo);
+            JOptionPane.showMessageDialog(this, "Usuario registrado correctamente");
+
+            Login lg = new Login();
+            lg.setVisible(true);
+            dispose();
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al registrar: " + e.getMessage());
+        }
     }
-
-    // 2️⃣ Validar formato de email
-    if (!correo.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
-        JOptionPane.showMessageDialog(this, "Ingrese un correo válido");
-        return;
-    }
-
-    // 3️⃣ Validar longitud mínima de contraseña
-    if (pass.length() < 6) {
-        JOptionPane.showMessageDialog(this, "La contraseña debe tener al menos 6 caracteres");
-        return;
-    }
-
-    // 4️⃣ Validar coincidencia de contraseñas
-    if (!pass.equals(confPass)) {
-        JOptionPane.showMessageDialog(this, "Las contraseñas no coinciden");
-        return;
-    }
-
-    // 5️⃣ Validar rol
-    if (rol.equals("Seleccionar")) {
-        JOptionPane.showMessageDialog(this, "Seleccione un rol válido");
-        return;
-    }
-
-    // 6️⃣ Si todas las validaciones pasan, registrar
-    lg.setNombre(nom);
-    lg.setCorreo(correo);
-    lg.setPass(pass);
-    lg.setRol(rol);
-
-    login.Registrar(lg);
-
-    JOptionPane.showMessageDialog(this, "Usuario registrado correctamente");
-
-    Login iniciar = new Login();
-    iniciar.setVisible(true);
-    dispose();
-}
 
     /**
      * This method is called from within the constructor to initialize the form.

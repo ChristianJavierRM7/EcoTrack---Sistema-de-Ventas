@@ -133,5 +133,18 @@ public class ClientesJpaController implements Serializable {
             em.close();
         }
     }
-    
+  
+    public Clientes findByDni(int dni) {
+    EntityManager em = getEntityManager();
+    try {
+        return em.createNamedQuery("Clientes.findByDni", Clientes.class)
+                 .setParameter("dni", dni)
+                 .getSingleResult();
+    } catch (Exception e) {
+        return null; // No encontrado
+    } finally {
+        em.close();
+    }
+}
+
 }

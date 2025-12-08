@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package Controladores;
 
 import Controladores.exceptions.NonexistentEntityException;
@@ -133,5 +130,21 @@ public class ProductosJpaController implements Serializable {
             em.close();
         }
     }
-    
+public Productos findByCodigo(String codigo) {
+    EntityManager em = getEntityManager();
+    try {
+        return em.createNamedQuery("Productos.findByCodigo", Productos.class)
+                 .setParameter("codigo", codigo)
+                 .getSingleResult();
+    } catch (jakarta.persistence.NoResultException nre) {
+        return null;
+    } catch (Exception ex) {
+        // opcional: loguear
+        return null;
+    } finally {
+        em.close();
+    }
+}
+
+
 }

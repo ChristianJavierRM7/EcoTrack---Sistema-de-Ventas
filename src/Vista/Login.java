@@ -1,35 +1,66 @@
 package Vista;
 
-import Modelo.LoginDAO;
-import Modelo.login;
+import Controladores.ConfigJpaController;
+import Controladores.UsuariosJpaController;
+import Entidades.Usuarios;
+import jakarta.persistence.EntityManagerFactory;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 public class Login extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Login.class.getName());
-login lg = new login();
-LoginDAO login = new LoginDAO();
-   
+
+       private ConfigJpaController configJpa;
+    private UsuariosJpaController usuariosJpa;
+
     public Login() {
         initComponents();
         this.setLocationRelativeTo(null);
-        this.ocultarLogin.setVisible(false);
+      jakarta.persistence.EntityManagerFactory emf =
+        jakarta.persistence.Persistence.createEntityManagerFactory("SistemaVenta");
+
+        usuariosJpa = new UsuariosJpaController(emf);
+
     }
-public void validar(){
-    String correo = txtCorreo.getText();
-    String pass = String.valueOf(txtPass.getPassword());
-    if(!"".equals(correo)||!"".equals(pass)){
-        
-        lg= login.log(correo, pass);
-        if(lg.getCorreo()!=null && lg.getPass() != null){
-            Sistema sis = new Sistema(lg);
-            sis.setVisible(true);
-            dispose();
-        }else{
-            JOptionPane.showMessageDialog(null, "El correo o la contraseña ingresados son incorrectos.");
+
+     public void validar() {
+        String correo = txtCorreo.getText().trim();
+        String pass = String.valueOf(txtPass.getPassword()).trim();
+
+        if (correo.isEmpty() || pass.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Debe llenar todos los campos");
+            return;
+        }
+
+        // --- CONSULTA EN JPA ---
+        try {
+            Usuarios usuario = buscarUsuario(correo, pass);
+
+            if (usuario != null) {
+                Sistema sis = new Sistema(usuario);
+                sis.setVisible(true);
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(null, "Correo o contraseña incorrectos.");
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
         }
     }
-}
+
+private Usuarios buscarUsuario(String correo, String pass) {
+        List<Usuarios> lista = usuariosJpa.findUsuariosEntities();
+
+        for (Usuarios u : lista) {
+            if (u.getCorreo().equals(correo) && u.getPass().equals(pass)) {
+                return u;
+            }
+        }
+
+        return null;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

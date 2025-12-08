@@ -5,6 +5,7 @@
 package Controladores;
 
 import Controladores.exceptions.NonexistentEntityException;
+import Entidades.Productos;
 import Entidades.Ventas;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -133,5 +134,19 @@ public class VentasJpaController implements Serializable {
             em.close();
         }
     }
-    
+    public void actualizarStock(String codigo, int nuevoStock) {
+    EntityManager em = getEntityManager();
+    try {
+        em.getTransaction().begin();
+        Productos p = em.find(Productos.class, codigo); // si tu PK es código
+        if (p != null) {
+            p.setStock(nuevoStock);
+            em.merge(p);
+        }
+        em.getTransaction().commit();
+    } finally {
+        em.close();
+    }
+}
+
 }

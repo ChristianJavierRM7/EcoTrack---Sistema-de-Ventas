@@ -133,5 +133,29 @@ public class UsuariosJpaController implements Serializable {
             em.close();
         }
     }
-    
+    public Usuarios log(String correo, String pass) {
+    EntityManager em = getEntityManager();
+    try {
+        List<Usuarios> lista = em.createQuery(
+            "SELECT u FROM Usuarios u WHERE u.correo = :correo AND u.pass = :pass",
+            Usuarios.class
+        )
+        .setParameter("correo", correo)
+        .setParameter("pass", pass)
+        .getResultList();
+
+        if (!lista.isEmpty()) {
+            return lista.get(0);  
+        } else {
+            return null;        
+        }
+
+    } finally {
+        em.close();
+    }
+}
+public void Registrar(Usuarios usuario) {
+    create(usuario);
+}
+
 }
