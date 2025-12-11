@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Entidades;
 
 import jakarta.persistence.Basic;
@@ -20,10 +16,6 @@ import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 
-/**
- *
- * @author Usuario
- */
 @Entity
 @Table(name = "proveedor")
 @NamedQueries({
@@ -34,52 +26,83 @@ import java.util.Date;
     @NamedQuery(name = "Proveedor.findByTelefono", query = "SELECT p FROM Proveedor p WHERE p.telefono = :telefono"),
     @NamedQuery(name = "Proveedor.findByDireccion", query = "SELECT p FROM Proveedor p WHERE p.direccion = :direccion"),
     @NamedQuery(name = "Proveedor.findByRazon", query = "SELECT p FROM Proveedor p WHERE p.razon = :razon"),
-    @NamedQuery(name = "Proveedor.findByFecha", query = "SELECT p FROM Proveedor p WHERE p.fecha = :fecha")})
+    @NamedQuery(name = "Proveedor.findByCorreo", query = "SELECT p FROM Proveedor p WHERE p.correo = :correo"),
+    @NamedQuery(name = "Proveedor.findByEstado", query = "SELECT p FROM Proveedor p WHERE p.estado = :estado"),
+    @NamedQuery(name = "Proveedor.findByFecha", query = "SELECT p FROM Proveedor p WHERE p.fecha = :fecha")
+})
 public class Proveedor implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    // ➤ ID
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
+
+    // ➤ RUC
     @Basic(optional = false)
     @NotNull
     @Column(name = "ruc")
     private int ruc;
+
+    // ➤ Nombre
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 200)
     @Column(name = "nombre")
     private String nombre;
+
+    // ➤ Teléfono
     @Basic(optional = false)
     @NotNull
     @Column(name = "telefono")
     private int telefono;
+
+    // ➤ Dirección
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 200)
     @Column(name = "direccion")
     private String direccion;
+
+    // ➤ Razón social
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 200)
     @Column(name = "razon")
     private String razon;
+
+    // ➤ Correo electrónico (NUEVO)
+    @Size(max = 100)
+    @Column(name = "correo")
+    private String correo;
+
+    // ➤ Estado (NUEVO) - Activo / Inactivo
+    @Size(max = 20)
+    @Column(name = "estado")
+    private String estado;
+
+    // ➤ Observaciones (NUEVO)
+    @Column(name = "observaciones")
+    private String observaciones;
+
+    // ➤ Fecha registro
     @Basic(optional = false)
     @NotNull
     @Column(name = "fecha")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
 
-    public Proveedor() {
-    }
+    public Proveedor() {}
 
     public Proveedor(Integer id) {
         this.id = id;
     }
 
-    public Proveedor(Integer id, int ruc, String nombre, int telefono, String direccion, String razon, Date fecha) {
+    public Proveedor(Integer id, int ruc, String nombre, int telefono,
+                     String direccion, String razon, Date fecha) {
         this.id = id;
         this.ruc = ruc;
         this.nombre = nombre;
@@ -89,61 +112,39 @@ public class Proveedor implements Serializable {
         this.fecha = fecha;
     }
 
-    public Integer getId() {
-        return id;
-    }
+    // =========================
+    //        GETTERS & SETTERS
+    // =========================
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
 
-    public int getRuc() {
-        return ruc;
-    }
+    public int getRuc() { return ruc; }
+    public void setRuc(int ruc) { this.ruc = ruc; }
 
-    public void setRuc(int ruc) {
-        this.ruc = ruc;
-    }
+    public String getNombre() { return nombre; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
 
-    public String getNombre() {
-        return nombre;
-    }
+    public int getTelefono() { return telefono; }
+    public void setTelefono(int telefono) { this.telefono = telefono; }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
+    public String getDireccion() { return direccion; }
+    public void setDireccion(String direccion) { this.direccion = direccion; }
 
-    public int getTelefono() {
-        return telefono;
-    }
+    public String getRazon() { return razon; }
+    public void setRazon(String razon) { this.razon = razon; }
 
-    public void setTelefono(int telefono) {
-        this.telefono = telefono;
-    }
+    public String getCorreo() { return correo; }
+    public void setCorreo(String correo) { this.correo = correo; }
 
-    public String getDireccion() {
-        return direccion;
-    }
+    public String getEstado() { return estado; }
+    public void setEstado(String estado) { this.estado = estado; }
 
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
-    }
+    public String getObservaciones() { return observaciones; }
+    public void setObservaciones(String observaciones) { this.observaciones = observaciones; }
 
-    public String getRazon() {
-        return razon;
-    }
-
-    public void setRazon(String razon) {
-        this.razon = razon;
-    }
-
-    public Date getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
-    }
+    public Date getFecha() { return fecha; }
+    public void setFecha(Date fecha) { this.fecha = fecha; }
 
     @Override
     public int hashCode() {
@@ -154,20 +155,14 @@ public class Proveedor implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Proveedor)) {
-            return false;
-        }
+        if (!(object instanceof Proveedor)) return false;
         Proveedor other = (Proveedor) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return !((this.id == null && other.id != null) 
+                || (this.id != null && !this.id.equals(other.id)));
     }
 
     @Override
     public String toString() {
         return "Entidades.Proveedor[ id=" + id + " ]";
     }
-    
 }

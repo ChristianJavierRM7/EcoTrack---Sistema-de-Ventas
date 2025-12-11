@@ -86,7 +86,7 @@ public class Sistema extends javax.swing.JFrame {
     this.detalleJpa = new DetalleJpaController(emf);
     CrearConfigInicial();
 txtIdCliente.setVisible(false);
-
+txtIdpro.setVisible(false);
         jTabbedPane1.setEnabled(false);
         txtRazonCV.setVisible(false);
         txtIdVenta.setVisible(false);
@@ -238,7 +238,7 @@ public void ListarProveedor() {
     modelo = (DefaultTableModel) TableProveedor.getModel();
     modelo.setRowCount(0);
 
-    Object[] ob = new Object[6];
+    Object[] ob = new Object[9];
 
     for (Proveedor p : lista) {
         ob[0] = p.getId();
@@ -247,11 +247,16 @@ public void ListarProveedor() {
         ob[3] = p.getTelefono();
         ob[4] = p.getDireccion();
         ob[5] = p.getRazon();
+        ob[6] = p.getCorreo();
+        ob[7] = p.getEstado();
+        ob[8] = p.getObservaciones();
+
         modelo.addRow(ob);
     }
 
     TableProveedor.setModel(modelo);
 }
+
 
     
 public void ListarProductos() {
@@ -352,7 +357,6 @@ public void ListarProductos() {
         jLabel34 = new javax.swing.JLabel();
         jLabel36 = new javax.swing.JLabel();
         jLabel37 = new javax.swing.JLabel();
-        jLabel38 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         txtVendedor = new javax.swing.JTextField();
         jLabel62 = new javax.swing.JLabel();
@@ -362,6 +366,7 @@ public void ListarProductos() {
         jLabel66 = new javax.swing.JLabel();
         jLabel67 = new javax.swing.JLabel();
         jLabel68 = new javax.swing.JLabel();
+        jSeparator3 = new javax.swing.JSeparator();
         jPanel3 = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
@@ -379,16 +384,15 @@ public void ListarProductos() {
         btnNuevoCliente = new javax.swing.JButton();
         txtIdCliente = new javax.swing.JTextField();
         jLabel33 = new javax.swing.JLabel();
-        jLabel39 = new javax.swing.JLabel();
         jLabel40 = new javax.swing.JLabel();
         jLabel44 = new javax.swing.JLabel();
         txtNombreCliente = new javax.swing.JTextField();
+        jSeparator4 = new javax.swing.JSeparator();
         jPanel4 = new javax.swing.JPanel();
         jLabel17 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
-        jLabel21 = new javax.swing.JLabel();
         txtRazonProveedor = new javax.swing.JTextField();
         txtRucProveedor = new javax.swing.JTextField();
         txtNombreproveedor = new javax.swing.JTextField();
@@ -401,9 +405,17 @@ public void ListarProductos() {
         btnNuevoProveedor = new javax.swing.JButton();
         btnEditarProveedor = new javax.swing.JButton();
         txtIdProveedor = new javax.swing.JTextField();
-        jLabel41 = new javax.swing.JLabel();
         jLabel42 = new javax.swing.JLabel();
         jLabel43 = new javax.swing.JLabel();
+        jLabel69 = new javax.swing.JLabel();
+        txtCorreoProveedor = new javax.swing.JTextField();
+        jLabel70 = new javax.swing.JLabel();
+        jLabel71 = new javax.swing.JLabel();
+        cbEstadoProveedor = new javax.swing.JComboBox<>();
+        jLabel72 = new javax.swing.JLabel();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        txtObservacionesProveedor = new javax.swing.JTextArea();
+        jSeparator2 = new javax.swing.JSeparator();
         jPanel5 = new javax.swing.JPanel();
         jLabel22 = new javax.swing.JLabel();
         jLabel23 = new javax.swing.JLabel();
@@ -423,8 +435,6 @@ public void ListarProductos() {
         btnExcelPro = new javax.swing.JButton();
         btnNuevoPro = new javax.swing.JButton();
         txtIdpro = new javax.swing.JTextField();
-        jLabel53 = new javax.swing.JLabel();
-        jLabel54 = new javax.swing.JLabel();
         jLabel55 = new javax.swing.JLabel();
         jLabel56 = new javax.swing.JLabel();
         jLabel57 = new javax.swing.JLabel();
@@ -432,6 +442,8 @@ public void ListarProductos() {
         txtCostoProducto = new javax.swing.JTextField();
         txtFechaCaducidad = new com.toedter.calendar.JDateChooser();
         txtFechaElaboracion = new com.toedter.calendar.JDateChooser();
+        jLabel73 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
         TableVentas = new javax.swing.JTable();
@@ -440,9 +452,8 @@ public void ListarProductos() {
         jLabel13 = new javax.swing.JLabel();
         jLabel45 = new javax.swing.JLabel();
         jLabel46 = new javax.swing.JLabel();
-        jLabel47 = new javax.swing.JLabel();
-        jLabel48 = new javax.swing.JLabel();
         jLabel49 = new javax.swing.JLabel();
+        jSeparator5 = new javax.swing.JSeparator();
         jPanel7 = new javax.swing.JPanel();
         jLabel27 = new javax.swing.JLabel();
         jLabel28 = new javax.swing.JLabel();
@@ -458,8 +469,10 @@ public void ListarProductos() {
         jLabel32 = new javax.swing.JLabel();
         txtIdConfig = new javax.swing.JTextField();
         jLabel50 = new javax.swing.JLabel();
-        jLabel51 = new javax.swing.JLabel();
         jLabel52 = new javax.swing.JLabel();
+        jLabel41 = new javax.swing.JLabel();
+        jSeparator6 = new javax.swing.JSeparator();
+        jSeparator7 = new javax.swing.JSeparator();
         jPanel8 = new javax.swing.JPanel();
         btnNuevaVenta2 = new javax.swing.JButton();
         btnClientes1 = new javax.swing.JButton();
@@ -737,7 +750,7 @@ public void ListarProductos() {
 
         jLabel34.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         jLabel34.setText("Ventas");
-        jPanel2.add(jLabel34, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 50, 110, -1));
+        jPanel2.add(jLabel34, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 110, -1));
 
         jLabel36.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel36.setText("Datos del cliente:");
@@ -747,12 +760,8 @@ public void ListarProductos() {
         jLabel37.setText("Datos del producto:");
         jPanel2.add(jLabel37, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 10, -1, -1));
 
-        jLabel38.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
-        jLabel38.setText("Módulo de ");
-        jPanel2.add(jLabel38, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 190, -1));
-
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Carrito-de-compras.png"))); // NOI18N
-        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 30, 40, 40));
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 40, 40, 40));
         jPanel2.add(txtVendedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 10, 10, -1));
 
         jLabel62.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -783,6 +792,9 @@ public void ListarProductos() {
         jLabel68.setText("código de producto consulte");
         jPanel2.add(jLabel68, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 210, -1, -1));
 
+        jSeparator3.setForeground(new java.awt.Color(0, 0, 0));
+        jPanel2.add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 190, 10));
+
         jTabbedPane1.addTab("Ventas", jPanel2);
 
         jPanel3.setBackground(new java.awt.Color(204, 255, 204));
@@ -790,22 +802,22 @@ public void ListarProductos() {
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel12.setText("CED/RUC:");
-        jPanel3.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 20, -1, -1));
+        jPanel3.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 10, -1, -1));
 
         jLabel14.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel14.setText("Teléfono:");
-        jPanel3.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 10, -1, -1));
+        jPanel3.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 10, -1, -1));
 
         jLabel15.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel15.setText("Dirección:");
-        jPanel3.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 80, -1, -1));
+        jPanel3.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 60, -1, -1));
 
         jLabel16.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel16.setText("Razón social:");
-        jPanel3.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 80, -1, -1));
+        jPanel3.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 60, -1, -1));
 
         txtRazonCliente.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jPanel3.add(txtRazonCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 100, 190, -1));
+        jPanel3.add(txtRazonCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 80, 380, -1));
 
         txtDniCliente.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtDniCliente.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -813,7 +825,7 @@ public void ListarProductos() {
                 txtDniClienteKeyTyped(evt);
             }
         });
-        jPanel3.add(txtDniCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 50, 117, -1));
+        jPanel3.add(txtDniCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 30, 170, -1));
 
         txtTelefonoCliente.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtTelefonoCliente.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -821,7 +833,7 @@ public void ListarProductos() {
                 txtTelefonoClienteKeyTyped(evt);
             }
         });
-        jPanel3.add(txtTelefonoCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 50, 120, -1));
+        jPanel3.add(txtTelefonoCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 30, 200, -1));
 
         txtDireccionCliente.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtDireccionCliente.addActionListener(new java.awt.event.ActionListener() {
@@ -834,7 +846,7 @@ public void ListarProductos() {
                 txtDireccionClienteKeyTyped(evt);
             }
         });
-        jPanel3.add(txtDireccionCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 100, 190, -1));
+        jPanel3.add(txtDireccionCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 80, 310, -1));
 
         TableCliente.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         TableCliente.setModel(new javax.swing.table.DefaultTableModel(
@@ -859,7 +871,7 @@ public void ListarProductos() {
             TableCliente.getColumnModel().getColumn(5).setPreferredWidth(80);
         }
 
-        jPanel3.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, 930, 270));
+        jPanel3.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 930, 250));
 
         btnEditarCliente.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnEditarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Actualizar (2).png"))); // NOI18N
@@ -869,7 +881,7 @@ public void ListarProductos() {
                 btnEditarClienteActionPerformed(evt);
             }
         });
-        jPanel3.add(btnEditarCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 40, -1, -1));
+        jPanel3.add(btnEditarCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 380, -1, -1));
 
         btnGuardarCliente.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnGuardarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/GuardarTodo.png"))); // NOI18N
@@ -879,7 +891,7 @@ public void ListarProductos() {
                 btnGuardarClienteActionPerformed(evt);
             }
         });
-        jPanel3.add(btnGuardarCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 40, -1, -1));
+        jPanel3.add(btnGuardarCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 380, -1, -1));
 
         btnEliminarCliente.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnEliminarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/eliminar.png"))); // NOI18N
@@ -889,7 +901,7 @@ public void ListarProductos() {
                 btnEliminarClienteActionPerformed(evt);
             }
         });
-        jPanel3.add(btnEliminarCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 90, -1, -1));
+        jPanel3.add(btnEliminarCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 380, -1, 30));
 
         btnNuevoCliente.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnNuevoCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/nuevo.png"))); // NOI18N
@@ -899,23 +911,19 @@ public void ListarProductos() {
                 btnNuevoClienteActionPerformed(evt);
             }
         });
-        jPanel3.add(btnNuevoCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 90, -1, -1));
+        jPanel3.add(btnNuevoCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 380, -1, -1));
         jPanel3.add(txtIdCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 390, 20, -1));
 
         jLabel33.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Clientes.png"))); // NOI18N
-        jPanel3.add(jLabel33, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 60, 40, 40));
-
-        jLabel39.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
-        jLabel39.setText("Módulo de ");
-        jPanel3.add(jLabel39, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 190, -1));
+        jPanel3.add(jLabel33, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 40, 40, 40));
 
         jLabel40.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         jLabel40.setText("Clientes");
-        jPanel3.add(jLabel40, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 90, 140, -1));
+        jPanel3.add(jLabel40, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 130, -1));
 
         jLabel44.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel44.setText("Nombre:");
-        jPanel3.add(jLabel44, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 20, -1, -1));
+        jPanel3.add(jLabel44, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 10, -1, -1));
 
         txtNombreCliente.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtNombreCliente.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -923,7 +931,10 @@ public void ListarProductos() {
                 txtNombreClienteKeyTyped(evt);
             }
         });
-        jPanel3.add(txtNombreCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 50, 190, -1));
+        jPanel3.add(txtNombreCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 30, 240, -1));
+
+        jSeparator4.setForeground(new java.awt.Color(0, 0, 0));
+        jPanel3.add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 190, 10));
 
         jTabbedPane1.addTab("Clientes", jPanel3);
 
@@ -940,15 +951,11 @@ public void ListarProductos() {
 
         jLabel19.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel19.setText("Nombre:");
-        jPanel4.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 20, -1, -1));
+        jPanel4.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 20, -1, -1));
 
         jLabel20.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel20.setText("Teléfono:");
-        jPanel4.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 20, -1, -1));
-
-        jLabel21.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel21.setText("Dirección:");
-        jPanel4.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 70, -1, -1));
+        jPanel4.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 20, -1, -1));
 
         txtRazonProveedor.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtRazonProveedor.addActionListener(new java.awt.event.ActionListener() {
@@ -956,7 +963,7 @@ public void ListarProductos() {
                 txtRazonProveedorActionPerformed(evt);
             }
         });
-        jPanel4.add(txtRazonProveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 90, 160, -1));
+        jPanel4.add(txtRazonProveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 90, 230, -1));
 
         txtRucProveedor.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtRucProveedor.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -964,7 +971,7 @@ public void ListarProductos() {
                 txtRucProveedorKeyTyped(evt);
             }
         });
-        jPanel4.add(txtRucProveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 40, 110, -1));
+        jPanel4.add(txtRucProveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 40, 160, -1));
 
         txtNombreproveedor.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtNombreproveedor.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -972,7 +979,7 @@ public void ListarProductos() {
                 txtNombreproveedorKeyTyped(evt);
             }
         });
-        jPanel4.add(txtNombreproveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 40, 180, -1));
+        jPanel4.add(txtNombreproveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 40, 230, -1));
 
         txtTelefonoProveedor.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtTelefonoProveedor.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -980,7 +987,7 @@ public void ListarProductos() {
                 txtTelefonoProveedorKeyTyped(evt);
             }
         });
-        jPanel4.add(txtTelefonoProveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 40, 150, -1));
+        jPanel4.add(txtTelefonoProveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 40, 190, -1));
 
         txtDireccionProveedor.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtDireccionProveedor.addActionListener(new java.awt.event.ActionListener() {
@@ -993,14 +1000,14 @@ public void ListarProductos() {
                 txtDireccionProveedorKeyTyped(evt);
             }
         });
-        jPanel4.add(txtDireccionProveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 90, 180, -1));
+        jPanel4.add(txtDireccionProveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 90, 190, -1));
 
         TableProveedor.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Id", "RUC", "Nombre", "Teléfono", "Dirección", "Razón social"
+                "Id", "RUC", "Nombre", "Teléfono", "Dirección", "Razón social", "Email", "Estado", "Observaciones"
             }
         ));
         TableProveedor.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -1018,7 +1025,7 @@ public void ListarProductos() {
             TableProveedor.getColumnModel().getColumn(5).setPreferredWidth(70);
         }
 
-        jPanel4.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, 930, 280));
+        jPanel4.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, 930, 190));
 
         btnguardarProveedor.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnguardarProveedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/GuardarTodo.png"))); // NOI18N
@@ -1028,7 +1035,7 @@ public void ListarProductos() {
                 btnguardarProveedorActionPerformed(evt);
             }
         });
-        jPanel4.add(btnguardarProveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 40, -1, -1));
+        jPanel4.add(btnguardarProveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 380, -1, -1));
 
         btnEliminarProveedor.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnEliminarProveedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/eliminar.png"))); // NOI18N
@@ -1038,7 +1045,7 @@ public void ListarProductos() {
                 btnEliminarProveedorActionPerformed(evt);
             }
         });
-        jPanel4.add(btnEliminarProveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 80, -1, -1));
+        jPanel4.add(btnEliminarProveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 380, -1, 30));
 
         btnNuevoProveedor.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnNuevoProveedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/nuevo.png"))); // NOI18N
@@ -1048,7 +1055,7 @@ public void ListarProductos() {
                 btnNuevoProveedorActionPerformed(evt);
             }
         });
-        jPanel4.add(btnNuevoProveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 80, -1, -1));
+        jPanel4.add(btnNuevoProveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 380, -1, -1));
 
         btnEditarProveedor.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnEditarProveedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Actualizar (2).png"))); // NOI18N
@@ -1058,19 +1065,44 @@ public void ListarProductos() {
                 btnEditarProveedorActionPerformed(evt);
             }
         });
-        jPanel4.add(btnEditarProveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 40, -1, -1));
-        jPanel4.add(txtIdProveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 60, 20, -1));
-
-        jLabel41.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
-        jLabel41.setText("Módulo de ");
-        jPanel4.add(jLabel41, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 190, -1));
+        jPanel4.add(btnEditarProveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 380, -1, -1));
+        jPanel4.add(txtIdProveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 50, 10, -1));
 
         jLabel42.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         jLabel42.setText("Proveedores");
-        jPanel4.add(jLabel42, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 210, -1));
+        jPanel4.add(jLabel42, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 210, -1));
 
         jLabel43.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/proveedor.png"))); // NOI18N
-        jPanel4.add(jLabel43, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 60, 40, 40));
+        jPanel4.add(jLabel43, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 40, 40, 40));
+
+        jLabel69.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel69.setText("Dirección:");
+        jPanel4.add(jLabel69, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 70, -1, -1));
+        jPanel4.add(txtCorreoProveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, 310, -1));
+
+        jLabel70.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel70.setText("Estado del proveedor:");
+        jPanel4.add(jLabel70, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 70, -1, -1));
+
+        jLabel71.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel71.setText("Observaciones:");
+        jPanel4.add(jLabel71, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 120, -1, -1));
+
+        cbEstadoProveedor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Activo\t", "Inactivo" }));
+        jPanel4.add(cbEstadoProveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 90, 130, -1));
+
+        jLabel72.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel72.setText("Correo electrónico:");
+        jPanel4.add(jLabel72, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, -1, -1));
+
+        txtObservacionesProveedor.setColumns(20);
+        txtObservacionesProveedor.setRows(5);
+        jScrollPane6.setViewportView(txtObservacionesProveedor);
+
+        jPanel4.add(jScrollPane6, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 140, 310, 30));
+
+        jSeparator2.setForeground(new java.awt.Color(0, 0, 0));
+        jPanel4.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 190, 10));
 
         jTabbedPane1.addTab("Proveedor", jPanel4);
 
@@ -1079,23 +1111,23 @@ public void ListarProductos() {
 
         jLabel22.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel22.setText("Código:");
-        jPanel5.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 10, -1, -1));
+        jPanel5.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 10, -1, -1));
 
         jLabel23.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel23.setText("Descripción:");
-        jPanel5.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 10, -1, -1));
+        jPanel5.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 10, -1, -1));
 
         jLabel24.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel24.setText("Fecha de caducidad:");
-        jPanel5.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 110, -1, -1));
+        jPanel5.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 60, -1, -1));
 
         jLabel25.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel25.setText("Precio:");
-        jPanel5.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 60, 50, -1));
+        jLabel25.setText("Pvp:");
+        jPanel5.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 10, 50, -1));
 
         jLabel26.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel26.setText("Proveedor:");
-        jPanel5.add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 60, -1, -1));
+        jPanel5.add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 60, -1, -1));
 
         txtCodigoPro.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtCodigoPro.addActionListener(new java.awt.event.ActionListener() {
@@ -1103,10 +1135,10 @@ public void ListarProductos() {
                 txtCodigoProActionPerformed(evt);
             }
         });
-        jPanel5.add(txtCodigoPro, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 30, 110, -1));
+        jPanel5.add(txtCodigoPro, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 30, 110, -1));
 
         txtDesPro.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jPanel5.add(txtDesPro, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 30, 180, -1));
+        jPanel5.add(txtDesPro, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 30, 190, -1));
 
         txtCantPro.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtCantPro.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -1114,7 +1146,7 @@ public void ListarProductos() {
                 txtCantProKeyTyped(evt);
             }
         });
-        jPanel5.add(txtCantPro, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 80, 80, -1));
+        jPanel5.add(txtCantPro, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 30, 80, -1));
 
         txtPrecioPro.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtPrecioPro.addActionListener(new java.awt.event.ActionListener() {
@@ -1127,11 +1159,11 @@ public void ListarProductos() {
                 txtPrecioProKeyTyped(evt);
             }
         });
-        jPanel5.add(txtPrecioPro, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 80, 60, -1));
+        jPanel5.add(txtPrecioPro, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 30, 60, -1));
 
         cbxProveedorPro.setEditable(true);
         cbxProveedorPro.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jPanel5.add(cbxProveedorPro, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 80, 150, -1));
+        jPanel5.add(cbxProveedorPro, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 80, 150, -1));
 
         TableProducto.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         TableProducto.setModel(new javax.swing.table.DefaultTableModel(
@@ -1157,7 +1189,7 @@ public void ListarProductos() {
             TableProducto.getColumnModel().getColumn(5).setPreferredWidth(50);
         }
 
-        jPanel5.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 920, 220));
+        jPanel5.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 920, 260));
 
         btnGuardarpro.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnGuardarpro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/GuardarTodo.png"))); // NOI18N
@@ -1167,7 +1199,7 @@ public void ListarProductos() {
                 btnGuardarproActionPerformed(evt);
             }
         });
-        jPanel5.add(btnGuardarpro, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 10, -1, -1));
+        jPanel5.add(btnGuardarpro, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 380, -1, -1));
 
         btnEliminarPro.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnEliminarPro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/eliminar.png"))); // NOI18N
@@ -1177,7 +1209,7 @@ public void ListarProductos() {
                 btnEliminarProActionPerformed(evt);
             }
         });
-        jPanel5.add(btnEliminarPro, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 50, -1, -1));
+        jPanel5.add(btnEliminarPro, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 380, -1, -1));
 
         btnEditarpro.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnEditarpro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Actualizar (2).png"))); // NOI18N
@@ -1187,7 +1219,7 @@ public void ListarProductos() {
                 btnEditarproActionPerformed(evt);
             }
         });
-        jPanel5.add(btnEditarpro, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 10, -1, -1));
+        jPanel5.add(btnEditarpro, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 380, -1, -1));
 
         btnExcelPro.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnExcelPro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/excel.png"))); // NOI18N
@@ -1197,7 +1229,7 @@ public void ListarProductos() {
                 btnExcelProActionPerformed(evt);
             }
         });
-        jPanel5.add(btnExcelPro, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 90, -1, -1));
+        jPanel5.add(btnExcelPro, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 380, -1, -1));
 
         btnNuevoPro.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnNuevoPro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/nuevo.png"))); // NOI18N
@@ -1207,34 +1239,33 @@ public void ListarProductos() {
                 btnNuevoProActionPerformed(evt);
             }
         });
-        jPanel5.add(btnNuevoPro, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 50, -1, -1));
-        jPanel5.add(txtIdpro, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 400, 20, -1));
-
-        jLabel53.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
-        jLabel53.setText("Módulo de ");
-        jPanel5.add(jLabel53, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 10, 190, -1));
-
-        jLabel54.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/proveedor.png"))); // NOI18N
-        jPanel5.add(jLabel54, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 40, 40, 40));
+        jPanel5.add(btnNuevoPro, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 380, -1, -1));
+        jPanel5.add(txtIdpro, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 20, -1));
 
         jLabel55.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         jLabel55.setText("Productos");
-        jPanel5.add(jLabel55, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 60, 170, 50));
+        jPanel5.add(jLabel55, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 170, 50));
 
         jLabel56.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel56.setText("Cantidad:");
-        jPanel5.add(jLabel56, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 60, -1, -1));
+        jPanel5.add(jLabel56, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 10, -1, -1));
 
         jLabel57.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel57.setText("Costo: ");
-        jPanel5.add(jLabel57, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, -1, -1));
+        jPanel5.add(jLabel57, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 10, -1, -1));
 
         jLabel58.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel58.setText("Fecha de elaboración:");
-        jPanel5.add(jLabel58, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 110, -1, -1));
-        jPanel5.add(txtCostoProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, 120, -1));
-        jPanel5.add(txtFechaCaducidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 130, 130, -1));
-        jPanel5.add(txtFechaElaboracion, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 130, 160, -1));
+        jPanel5.add(jLabel58, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 60, -1, -1));
+        jPanel5.add(txtCostoProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 30, 120, -1));
+        jPanel5.add(txtFechaCaducidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 80, 130, -1));
+        jPanel5.add(txtFechaElaboracion, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 80, 160, -1));
+
+        jLabel73.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/producto.png"))); // NOI18N
+        jPanel5.add(jLabel73, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 40, 40, 40));
+
+        jSeparator1.setForeground(new java.awt.Color(0, 0, 0));
+        jPanel5.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 70, 190, 10));
 
         jTabbedPane1.addTab("Productos", jPanel5);
 
@@ -1263,7 +1294,7 @@ public void ListarProductos() {
             TableVentas.getColumnModel().getColumn(3).setPreferredWidth(60);
         }
 
-        jPanel6.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 170, 900, 240));
+        jPanel6.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, 930, 240));
 
         btnPdfVentas.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         btnPdfVentas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/pdf.png"))); // NOI18N
@@ -1273,30 +1304,25 @@ public void ListarProductos() {
                 btnPdfVentasActionPerformed(evt);
             }
         });
-        jPanel6.add(btnPdfVentas, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 80, 210, 60));
-        jPanel6.add(txtIdVenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 0, 10, -1));
+        jPanel6.add(btnPdfVentas, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 370, 210, 40));
+        jPanel6.add(txtIdVenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 10, -1));
 
         jLabel13.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel13.setText("Seleccione la venta a ser reimprimida:");
-        jPanel6.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 130, -1, -1));
+        jPanel6.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, -1, -1));
 
         jLabel45.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
-        jLabel45.setText("Reimpresión de");
-        jPanel6.add(jLabel45, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 260, -1));
+        jLabel45.setText("Reimpresión de facturas de ventas");
+        jPanel6.add(jLabel45, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 560, -1));
 
         jLabel46.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/producto.png"))); // NOI18N
-        jPanel6.add(jLabel46, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 50, 40, 40));
-
-        jLabel47.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
-        jLabel47.setText("Ventas");
-        jPanel6.add(jLabel47, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 120, -1, -1));
-
-        jLabel48.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
-        jLabel48.setText("Facturas de");
-        jPanel6.add(jLabel48, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 70, 200, -1));
+        jPanel6.add(jLabel46, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 50, 40, 40));
 
         jLabel49.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/pdf.png"))); // NOI18N
-        jPanel6.add(jLabel49, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 50, 40, 40));
+        jPanel6.add(jLabel49, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 50, 40, 40));
+
+        jSeparator5.setForeground(new java.awt.Color(0, 0, 0));
+        jPanel6.add(jSeparator5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 540, 10));
 
         jTabbedPane1.addTab("Ventas", jPanel6);
 
@@ -1305,23 +1331,23 @@ public void ListarProductos() {
 
         jLabel27.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel27.setText("Teléfono:");
-        jPanel7.add(jLabel27, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 130, -1, -1));
+        jPanel7.add(jLabel27, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 60, -1, -1));
 
         jLabel28.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel28.setText("CED/RUC:");
-        jPanel7.add(jLabel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 130, -1, -1));
+        jPanel7.add(jLabel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 60, -1, -1));
 
         jLabel29.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel29.setText("Nombre:");
-        jPanel7.add(jLabel29, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 130, -1, -1));
+        jPanel7.add(jLabel29, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 60, -1, -1));
 
         jLabel30.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel30.setText("Razón social:");
-        jPanel7.add(jLabel30, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 210, -1, -1));
+        jPanel7.add(jLabel30, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 110, -1, -1));
 
         jLabel31.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel31.setText("Dirección:");
-        jPanel7.add(jLabel31, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 210, -1, -1));
+        jPanel7.add(jLabel31, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 110, -1, -1));
 
         txtTelefonoConfig.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtTelefonoConfig.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -1329,7 +1355,7 @@ public void ListarProductos() {
                 txtTelefonoConfigKeyTyped(evt);
             }
         });
-        jPanel7.add(txtTelefonoConfig, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 150, 200, -1));
+        jPanel7.add(txtTelefonoConfig, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 80, 200, -1));
 
         txtRucConfig.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtRucConfig.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -1337,7 +1363,7 @@ public void ListarProductos() {
                 txtRucConfigKeyTyped(evt);
             }
         });
-        jPanel7.add(txtRucConfig, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 150, 150, -1));
+        jPanel7.add(txtRucConfig, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 80, 190, -1));
 
         txtNombreConfig.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtNombreConfig.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -1345,38 +1371,46 @@ public void ListarProductos() {
                 txtNombreConfigKeyTyped(evt);
             }
         });
-        jPanel7.add(txtNombreConfig, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 150, 230, -1));
+        jPanel7.add(txtNombreConfig, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 80, 230, -1));
 
         txtDireccionConfig.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jPanel7.add(txtDireccionConfig, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 230, 270, -1));
+        jPanel7.add(txtDireccionConfig, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 130, 270, -1));
 
         txtRazonConfig.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jPanel7.add(txtRazonConfig, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 230, 250, -1));
+        jPanel7.add(txtRazonConfig, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 130, 230, -1));
 
-        btnActualizarConfig.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        btnActualizarConfig.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         btnActualizarConfig.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Actualizar (2).png"))); // NOI18N
         btnActualizarConfig.setText("Actualizar");
+        btnActualizarConfig.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btnActualizarConfig.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnActualizarConfigActionPerformed(evt);
             }
         });
-        jPanel7.add(btnActualizarConfig, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 300, -1, 70));
+        jPanel7.add(btnActualizarConfig, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 120, 140, 30));
 
         jLabel32.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabel32.setText("ACTUALIZAR");
-        jPanel7.add(jLabel32, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 20, -1, -1));
-        jPanel7.add(txtIdConfig, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 390, 10, -1));
+        jLabel32.setText("Actualizar datos");
+        jPanel7.add(jLabel32, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, -1, -1));
+        jPanel7.add(txtIdConfig, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 20, 10, -1));
 
         jLabel50.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabel50.setText("DATOS DE LA EMPRESA");
-        jPanel7.add(jLabel50, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 60, -1, -1));
-
-        jLabel51.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/config.png"))); // NOI18N
-        jPanel7.add(jLabel51, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 30, 40, 50));
+        jLabel50.setText("de la empresa");
+        jPanel7.add(jLabel50, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, -1, -1));
 
         jLabel52.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/config.png"))); // NOI18N
-        jPanel7.add(jLabel52, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 30, 40, 50));
+        jPanel7.add(jLabel52, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 40, 50));
+
+        jLabel41.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        jLabel41.setText("Configuración");
+        jPanel7.add(jLabel41, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 230, -1));
+
+        jSeparator6.setForeground(new java.awt.Color(0, 0, 0));
+        jPanel7.add(jSeparator6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 160, 920, 10));
+
+        jSeparator7.setForeground(new java.awt.Color(0, 0, 0));
+        jPanel7.add(jSeparator7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 270, 10));
 
         jTabbedPane1.addTab("Configuración", jPanel7);
 
@@ -1533,24 +1567,32 @@ public void ListarProductos() {
         txtRazonCliente.setText("");
 
     }
-     private void LimpiarProveedor() {
-        txtIdProveedor.setText("");
-        txtRucProveedor.setText("");
-        txtNombreproveedor.setText("");
-        txtTelefonoProveedor.setText("");
-        txtDireccionProveedor.setText("");
-        txtRazonProveedor.setText("");
+   private void LimpiarProveedor() {
+    txtIdProveedor.setText("");
+    txtRucProveedor.setText("");
+    txtNombreproveedor.setText("");
+    txtTelefonoProveedor.setText("");
+    txtDireccionProveedor.setText("");
+    txtRazonProveedor.setText("");
+    txtCorreoProveedor.setText("");
+    cbEstadoProveedor.setSelectedIndex(0); // Activo
+    txtObservacionesProveedor.setText("");
+}
 
-    }
      
-      private void LimpiarProductos() {
-        txtIdPro.setText("");
-        txtCodigoPro.setText("");
-        cbxProveedorPro.setSelectedItem(null);
-        txtPrecioPro.setText("");
-        txtDesPro.setText("");
-        txtCantPro.setText("");
-    }
+  private void LimpiarProductos() {
+    txtIdPro.setText("");
+    txtCodigoPro.setText("");
+    txtDesPro.setText("");
+    cbxProveedorPro.setSelectedIndex(0); // O null si deseas
+    txtCantPro.setText("");
+    txtPrecioPro.setText("");
+    txtCostoProducto.setText("");
+    txtFechaElaboracion.setDate(null);
+    txtFechaCaducidad.setDate(null);
+    
+}
+
     private void btnClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClientesActionPerformed
         LimpiarTable(TableCliente);
         ListarCliente();
@@ -1629,29 +1671,37 @@ public void ListarProductos() {
     }//GEN-LAST:event_btnNuevoClienteActionPerformed
 
     private void btnguardarProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnguardarProveedorActionPerformed
-
-        if (txtRucProveedor.getText().isEmpty() ||
+    if (txtRucProveedor.getText().isEmpty() ||
         txtNombreproveedor.getText().isEmpty() ||
         txtTelefonoProveedor.getText().isEmpty() ||
         txtDireccionProveedor.getText().isEmpty() ||
-        txtRazonProveedor.getText().isEmpty()) {
+        txtRazonProveedor.getText().isEmpty() ||
+        txtCorreoProveedor.getText().isEmpty() ||
+        cbEstadoProveedor.getSelectedItem() == null) {
 
-        JOptionPane.showMessageDialog(null, "Los campos no pueden estar vacíos");
+        JOptionPane.showMessageDialog(null, "Todos los campos obligatorios deben ser llenados");
         return;
     }
 
     try {
         Proveedor p = new Proveedor();
+
         p.setRuc(Integer.parseInt(txtRucProveedor.getText()));
         p.setNombre(txtNombreproveedor.getText());
         p.setTelefono(Integer.parseInt(txtTelefonoProveedor.getText()));
         p.setDireccion(txtDireccionProveedor.getText());
         p.setRazon(txtRazonProveedor.getText());
-        p.setFecha(new Date());
+
+        // NUEVOS CAMPOS
+        p.setCorreo(txtCorreoProveedor.getText());
+        p.setEstado(cbEstadoProveedor.getSelectedItem().toString());
+        p.setObservaciones(txtObservacionesProveedor.getText());
+
+        p.setFecha(new Date()); // registro automático
 
         proveedorJpa.create(p);
 
-        JOptionPane.showMessageDialog(null, "Proveedor registrado");
+        JOptionPane.showMessageDialog(null, "Proveedor registrado correctamente");
 
         LimpiarTable(TableProveedor);
         ListarProveedor();
@@ -1660,7 +1710,6 @@ public void ListarProductos() {
     } catch (Exception ex) {
         JOptionPane.showMessageDialog(null, "Error al registrar proveedor: " + ex.getMessage());
     }
-
     }//GEN-LAST:event_btnguardarProveedorActionPerformed
 
     private void btnProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProveedorActionPerformed
@@ -1670,13 +1719,25 @@ public void ListarProductos() {
     }//GEN-LAST:event_btnProveedorActionPerformed
 
     private void TableProveedorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableProveedorMouseClicked
-        int fila = TableProveedor.rowAtPoint(evt.getPoint());
-        txtIdProveedor.setText(TableProveedor.getValueAt(fila, 0).toString());
-        txtRucProveedor.setText(TableProveedor.getValueAt(fila, 1).toString());
-        txtNombreproveedor.setText(TableProveedor.getValueAt(fila, 2).toString());
-        txtTelefonoProveedor.setText(TableProveedor.getValueAt(fila, 3).toString());
-        txtDireccionProveedor.setText(TableProveedor.getValueAt(fila, 4).toString());
-        txtRazonProveedor.setText(TableProveedor.getValueAt(fila, 5).toString());
+    int fila = TableProveedor.rowAtPoint(evt.getPoint());
+    
+    txtIdProveedor.setText(TableProveedor.getValueAt(fila, 0).toString());
+    txtRucProveedor.setText(TableProveedor.getValueAt(fila, 1).toString());
+    txtNombreproveedor.setText(TableProveedor.getValueAt(fila, 2).toString());
+    txtTelefonoProveedor.setText(TableProveedor.getValueAt(fila, 3).toString());
+    txtDireccionProveedor.setText(TableProveedor.getValueAt(fila, 4).toString());
+    txtRazonProveedor.setText(TableProveedor.getValueAt(fila, 5).toString());
+
+    // Nuevos campos
+    txtCorreoProveedor.setText(TableProveedor.getValueAt(fila, 6) != null ? 
+                               TableProveedor.getValueAt(fila, 6).toString() : "");
+
+    cbEstadoProveedor.setSelectedItem(TableProveedor.getValueAt(fila, 7) != null ? 
+                                      TableProveedor.getValueAt(fila, 7).toString() : "Activo");
+
+    txtObservacionesProveedor.setText(TableProveedor.getValueAt(fila, 8) != null ?
+                                      TableProveedor.getValueAt(fila, 8).toString() : "");
+
     }//GEN-LAST:event_TableProveedorMouseClicked
 
     private void btnEliminarProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarProveedorActionPerformed
@@ -1704,7 +1765,7 @@ public void ListarProductos() {
 
     private void btnEditarProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarProveedorActionPerformed
     if (txtIdProveedor.getText().isEmpty()) {
-        JOptionPane.showMessageDialog(null, "Seleccione una fila");
+        JOptionPane.showMessageDialog(null, "Seleccione un proveedor de la tabla");
         return;
     }
 
@@ -1722,9 +1783,14 @@ public void ListarProductos() {
         p.setDireccion(txtDireccionProveedor.getText());
         p.setRazon(txtRazonProveedor.getText());
 
+        // NUEVOS CAMPOS
+        p.setCorreo(txtCorreoProveedor.getText());
+        p.setEstado(cbEstadoProveedor.getSelectedItem().toString());
+        p.setObservaciones(txtObservacionesProveedor.getText());
+
         proveedorJpa.edit(p);
 
-        JOptionPane.showMessageDialog(null, "Proveedor modificado");
+        JOptionPane.showMessageDialog(null, "Proveedor modificado correctamente");
 
         LimpiarTable(TableProveedor);
         ListarProveedor();
@@ -2592,6 +2658,7 @@ LimpiarTable(TableProveedor);
     private javax.swing.JButton btnVentas;
     private javax.swing.JButton btnVentas1;
     private javax.swing.JButton btnguardarProveedor;
+    private javax.swing.JComboBox<String> cbEstadoProveedor;
     private javax.swing.JComboBox<String> cbxProveedorPro;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
@@ -2607,7 +2674,6 @@ LimpiarTable(TableProveedor);
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
@@ -2625,8 +2691,6 @@ LimpiarTable(TableProveedor);
     private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel36;
     private javax.swing.JLabel jLabel37;
-    private javax.swing.JLabel jLabel38;
-    private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel40;
     private javax.swing.JLabel jLabel41;
@@ -2635,15 +2699,10 @@ LimpiarTable(TableProveedor);
     private javax.swing.JLabel jLabel44;
     private javax.swing.JLabel jLabel45;
     private javax.swing.JLabel jLabel46;
-    private javax.swing.JLabel jLabel47;
-    private javax.swing.JLabel jLabel48;
     private javax.swing.JLabel jLabel49;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel50;
-    private javax.swing.JLabel jLabel51;
     private javax.swing.JLabel jLabel52;
-    private javax.swing.JLabel jLabel53;
-    private javax.swing.JLabel jLabel54;
     private javax.swing.JLabel jLabel55;
     private javax.swing.JLabel jLabel56;
     private javax.swing.JLabel jLabel57;
@@ -2659,7 +2718,12 @@ LimpiarTable(TableProveedor);
     private javax.swing.JLabel jLabel66;
     private javax.swing.JLabel jLabel67;
     private javax.swing.JLabel jLabel68;
+    private javax.swing.JLabel jLabel69;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel70;
+    private javax.swing.JLabel jLabel71;
+    private javax.swing.JLabel jLabel72;
+    private javax.swing.JLabel jLabel73;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
@@ -2675,11 +2739,20 @@ LimpiarTable(TableProveedor);
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JSeparator jSeparator4;
+    private javax.swing.JSeparator jSeparator5;
+    private javax.swing.JSeparator jSeparator6;
+    private javax.swing.JSeparator jSeparator7;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextField txtCantPro;
     private javax.swing.JTextField txtCantidadVenta;
     private javax.swing.JTextField txtCodigoPro;
     private javax.swing.JTextField txtCodigoVenta;
+    private javax.swing.JTextField txtCorreoProveedor;
     private javax.swing.JTextField txtCostoProducto;
     private javax.swing.JTextField txtDesPro;
     private javax.swing.JTextField txtDescripcionVenta;
@@ -2700,6 +2773,7 @@ LimpiarTable(TableProveedor);
     private javax.swing.JTextField txtNombreClienteventa;
     private javax.swing.JTextField txtNombreConfig;
     private javax.swing.JTextField txtNombreproveedor;
+    private javax.swing.JTextArea txtObservacionesProveedor;
     private javax.swing.JTextField txtPrecioPro;
     private javax.swing.JTextField txtPrecioVenta;
     private javax.swing.JTextField txtRazonCV;
