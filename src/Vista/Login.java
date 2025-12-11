@@ -18,7 +18,7 @@ public class Login extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
       jakarta.persistence.EntityManagerFactory emf =
-        jakarta.persistence.Persistence.createEntityManagerFactory("SistemaVenta");
+        jakarta.persistence.Persistence.createEntityManagerFactory("SistemaVentaPU");
 
         usuariosJpa = new UsuariosJpaController(emf);
 
@@ -40,6 +40,7 @@ public class Login extends javax.swing.JFrame {
             if (usuario != null) {
                 Sistema sis = new Sistema(usuario);
                 sis.setVisible(true);
+                
                 dispose();
             } else {
                 JOptionPane.showMessageDialog(null, "Correo o contraseña incorrectos.");
@@ -101,8 +102,9 @@ private Usuarios buscarUsuario(String correo, String pass) {
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel3.setText("Correo Electrónico:");
-        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(27, 99, -1, -1));
+        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, -1, -1));
 
+        txtCorreo.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtCorreo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtCorreoActionPerformed(evt);
@@ -114,6 +116,7 @@ private Usuarios buscarUsuario(String correo, String pass) {
         jLabel4.setText("Contraseña:");
         jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(27, 174, -1, -1));
 
+        txtPass.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtPass.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtPassActionPerformed(evt);

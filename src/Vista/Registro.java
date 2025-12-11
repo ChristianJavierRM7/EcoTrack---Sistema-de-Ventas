@@ -15,7 +15,7 @@ public class Registro extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
 jakarta.persistence.EntityManagerFactory emf =
-        jakarta.persistence.Persistence.createEntityManagerFactory("SistemaVenta");
+        jakarta.persistence.Persistence.createEntityManagerFactory("SistemaVentaPU");
 
         usuariosJpa = new UsuariosJpaController(emf);
 
@@ -125,6 +125,7 @@ jakarta.persistence.EntityManagerFactory emf =
         jLabel3.setText("Correo Electrónico:");
         jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, -1, -1));
 
+        txtCorreo.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtCorreo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtCorreoActionPerformed(evt);
@@ -136,6 +137,7 @@ jakarta.persistence.EntityManagerFactory emf =
         jLabel4.setText("Confirmar contraseña:");
         jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, -1, -1));
 
+        txtPass.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtPass.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtPassActionPerformed(evt);
@@ -161,8 +163,11 @@ jakarta.persistence.EntityManagerFactory emf =
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel10.setText("Rol:");
         jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, -1, -1));
+
+        txtNombre.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jPanel2.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 270, 313, 27));
 
+        cbxRol.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         cbxRol.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Administrador", "Asistente" }));
         jPanel2.add(cbxRol, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 319, 313, 30));
 
@@ -180,6 +185,8 @@ jakarta.persistence.EntityManagerFactory emf =
         jLabel13.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel13.setText("Contraseña:");
         jPanel2.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, -1, -1));
+
+        txtConfPass.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jPanel2.add(txtConfPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 210, 260, -1));
 
         verPassReg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/image-removebg-preview (6) (2).png"))); // NOI18N
@@ -224,7 +231,7 @@ jakarta.persistence.EntityManagerFactory emf =
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 10, -1, -1));
 
         jLabel6.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel6.setFont(new java.awt.Font("Wide Latin", 1, 24)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 48)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("nuevo usuario");
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 340, 340, -1));
@@ -248,10 +255,10 @@ jakarta.persistence.EntityManagerFactory emf =
         jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 200, -1, -1));
 
         jLabel12.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel12.setFont(new java.awt.Font("Wide Latin", 1, 24)); // NOI18N
+        jLabel12.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 48)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(255, 255, 255));
         jLabel12.setText("Registro de ");
-        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 300, 250, -1));
+        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 270, 290, -1));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 480, 450));
 

@@ -90,6 +90,16 @@ public class Productos implements Serializable {
 
     public Date getFechaCaducidad() { return fechaCaducidad; }
     public void setFechaCaducidad(Date fechaCaducidad) { this.fechaCaducidad = fechaCaducidad; }
+@Column(name = "stock_min")
+private Integer stockMin;
+
+public Integer getStockMin() {
+    return stockMin;
+}
+
+public void setStockMin(Integer stockMin) {
+    this.stockMin = stockMin;
+}
 
 
     @Override
