@@ -21,130 +21,76 @@ import java.util.Date;
 @Table(name = "productos")
 @NamedQueries({
     @NamedQuery(name = "Productos.findAll", query = "SELECT p FROM Productos p"),
-    @NamedQuery(name = "Productos.findById", query = "SELECT p FROM Productos p WHERE p.id = :id"),
-    @NamedQuery(name = "Productos.findByCodigo", query = "SELECT p FROM Productos p WHERE p.codigo = :codigo"),
-    @NamedQuery(name = "Productos.findByNombre", query = "SELECT p FROM Productos p WHERE p.nombre = :nombre"),
-    @NamedQuery(name = "Productos.findByProveedor", query = "SELECT p FROM Productos p WHERE p.proveedor = :proveedor"),
-    @NamedQuery(name = "Productos.findByStock", query = "SELECT p FROM Productos p WHERE p.stock = :stock"),
-    @NamedQuery(name = "Productos.findByPrecio", query = "SELECT p FROM Productos p WHERE p.precio = :precio"),
-    @NamedQuery(name = "Productos.findByFecha", query = "SELECT p FROM Productos p WHERE p.fecha = :fecha")})
+    @NamedQuery(name = "Productos.findByCodigo", query = "SELECT p FROM Productos p WHERE p.codigo = :codigo")
+})
 public class Productos implements Serializable {
 
-    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id")
     private Integer id;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 30)
-    @Column(name = "codigo")
+
+    @Column(nullable = false, length = 30)
     private String codigo;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
-    @Column(name = "nombre")
+
+    @Column(nullable = false, length = 255)
     private String nombre;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 100)
-    @Column(name = "proveedor")
+
+    @Column(nullable = false, length = 100)
     private String proveedor;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "stock")
+
+    @Column(nullable = false)
     private int stock;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "precio")
+
+    @Column(nullable = false)
     private BigDecimal precio;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "fecha")
+
     @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false)
     private Date fecha;
 
-    public Productos() {
-    }
+    @Column(name = "costo")
+    private BigDecimal costo;
 
-    public Productos(Integer id) {
-        this.id = id;
-    }
+    @Column(name = "fecha_elaboracion")
+    @Temporal(TemporalType.DATE)
+    private Date fechaElaboracion;
 
-    public Productos(Integer id, String codigo, String nombre, String proveedor, int stock, BigDecimal precio, Date fecha) {
-        this.id = id;
-        this.codigo = codigo;
-        this.nombre = nombre;
-        this.proveedor = proveedor;
-        this.stock = stock;
-        this.precio = precio;
-        this.fecha = fecha;
-    }
+    @Column(name = "fecha_caducidad")
+    @Temporal(TemporalType.DATE)
+    private Date fechaCaducidad;
 
-    public Integer getId() {
-        return id;
-    }
+    public Productos() {}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
 
-    public String getCodigo() {
-        return codigo;
-    }
+    public String getCodigo() { return codigo; }
+    public void setCodigo(String codigo) { this.codigo = codigo; }
 
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
-    }
+    public String getNombre() { return nombre; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
 
-    public String getNombre() {
-        return nombre;
-    }
+    public String getProveedor() { return proveedor; }
+    public void setProveedor(String proveedor) { this.proveedor = proveedor; }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
+    public int getStock() { return stock; }
+    public void setStock(int stock) { this.stock = stock; }
 
-    public String getProveedor() {
-        return proveedor;
-    }
+    public BigDecimal getPrecio() { return precio; }
+    public void setPrecio(BigDecimal precio) { this.precio = precio; }
 
-    public void setProveedor(String proveedor) {
-        this.proveedor = proveedor;
-    }
+    public Date getFecha() { return fecha; }
+    public void setFecha(Date fecha) { this.fecha = fecha; }
 
-    public int getStock() {
-        return stock;
-    }
+    public BigDecimal getCosto() { return costo; }
+    public void setCosto(BigDecimal costo) { this.costo = costo; }
 
-    public void setStock(int stock) {
-        this.stock = stock;
-    }
+    public Date getFechaElaboracion() { return fechaElaboracion; }
+    public void setFechaElaboracion(Date fechaElaboracion) { this.fechaElaboracion = fechaElaboracion; }
 
-    public BigDecimal getPrecio() {
-        return precio;
-    }
+    public Date getFechaCaducidad() { return fechaCaducidad; }
+    public void setFechaCaducidad(Date fechaCaducidad) { this.fechaCaducidad = fechaCaducidad; }
 
-    public void setPrecio(BigDecimal precio) {
-        this.precio = precio;
-    }
-
-    public Date getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
 
     @Override
     public boolean equals(Object object) {
