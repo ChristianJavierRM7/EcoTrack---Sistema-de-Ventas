@@ -146,5 +146,19 @@ public Productos findByCodigo(String codigo) {
     }
 }
 
+public List<Productos> buscarPorNombre(String nombre) {
+    EntityManager em = getEntityManager();
+    try {
+        return em.createQuery(
+            "SELECT p FROM Productos p WHERE LOWER(p.nombre) LIKE :nombre",
+            Productos.class)
+            .setParameter("nombre", "%" + nombre.toLowerCase() + "%")
+            .getResultList();
+    } finally {
+        em.close();
+    }
+}
+
+
 
 }

@@ -13,10 +13,6 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import java.util.List;
 
-/**
- *
- * @author Usuario
- */
 public class ConfigJpaController implements Serializable {
 
     public ConfigJpaController(EntityManagerFactory emf) {

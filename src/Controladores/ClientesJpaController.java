@@ -141,7 +141,7 @@ public class ClientesJpaController implements Serializable {
                  .setParameter("dni", dni)
                  .getSingleResult();
     } catch (Exception e) {
-        return null; // No encontrado
+        return null; 
     } finally {
         em.close();
     }
